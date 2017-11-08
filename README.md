@@ -10,3 +10,13 @@ Os arquivos com o design de arquitetura estão na pasta de mesmo nome, em format
 
 ### 1º Passo
 Baixe o [script](https://gist.githubusercontent.com/alessandroliafook/710821d1965bbf5a4217cc2eba029b96/raw/3e20e545e959b3286554814251213c3770419683/postgresql.sh) e execute para instalação do banco de dados.
+
+Finalizada a instalação configure o usuário e o password:
+```
+sudo -u postgres createuser avirtual -s
+sudo -u postgres psql
+postgres=# \password avirtual
+# Configure o password igual ao usuário
+Digite nova senha: avirtual 
+Digite-a novamente: avirtual
+```
