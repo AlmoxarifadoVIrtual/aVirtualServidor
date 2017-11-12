@@ -14,9 +14,7 @@ public class ControleUsuario {
     @Autowired
     private RepositorioUsuario repositorio;
 
-    public void setRepositorio(RepositorioUsuario repositorio) {
-        this.repositorio = repositorio;
-    }
+    public void setRepositorio(RepositorioUsuario repositorio) { this.repositorio = repositorio; }
 
     public Usuario create(Usuario usuario) {
         System.out.println(usuario + "estah sendo criado");
