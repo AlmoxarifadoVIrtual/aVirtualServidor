@@ -1,10 +1,11 @@
 package lesufcg.almoxarifadovirtual.modelo.usuario;
 
 import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
 
 @Entity(name = "Usuario")
-@Table(name = "tb_usuario")
+@Table(name = "usuario")
 public class Usuario {
 
     @Id
@@ -19,18 +20,11 @@ public class Usuario {
     private FuncaoUsuario funcao;
 
     public Usuario(String nome, FuncaoUsuario tipoUsuario) {
-        if(tipoUsuario != FuncaoUsuario.ROOT) {
-            this.nome = nome;
-            this.funcao = tipoUsuario;
-        } else {
-            throw new RuntimeException("Tipo inválido: " + FuncaoUsuario.ROOT.toString());
-        }
+        this.nome = nome;
+        this.funcao = tipoUsuario;
     }
 
-    public Usuario() {
-        this.nome = "root";
-        this.funcao = FuncaoUsuario.ROOT;
-    }
+    public Usuario(){}
 
     public Long getId() {
         return id;
