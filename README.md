@@ -20,3 +20,14 @@ postgres=# \password avirtual
 Digite nova senha: avirtual 
 Digite-a novamente: avirtual
 ```
+
+### 2º Passo
+Realize a instalação do [pgAdmin4](https://www.pgadmin.org/download/).
+Obs. Caso use um sistema operacional ubuntu pode seguir o [tutorial](https://askubuntu.com/questions/831262/how-to-install-pgadmin-4-in-desktop-mode-on-ubuntu) para realizar a instalação do software.
+
+Após a instalação, realize a criação do banco de dados através do software.
+Lembre de configurar os nomes como sendo:
+Host: localhost
+Nome: postgres
+Usuario: avirtual
+Senha: avirtual
