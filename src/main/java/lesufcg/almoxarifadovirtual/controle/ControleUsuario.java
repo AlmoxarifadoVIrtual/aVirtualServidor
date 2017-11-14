@@ -14,22 +14,34 @@ public class ControleUsuario {
     @Autowired
     private RepositorioUsuario repositorio;
 
-    public void setRepositorio(RepositorioUsuario repositorio) { this.repositorio = repositorio; }
+    public void setRepositorio(RepositorioUsuario repositorio) {
+        this.repositorio = repositorio;
+    }
 
     public Usuario create(Usuario usuario) {
+        validateId(usuario.getId());
         System.out.println(usuario + "estah sendo criado");
         return repositorio.save(usuario);
     }
 
-    public Usuario getById(Long id) {
+    public Usuario get(Long id) {
+        validateId(id);
         return repositorio.findOne(id);
     }
 
     public List<Usuario> getAll() {
-        return repositorio.findAll();
+
+        List<Usuario> usuarios = repositorio.findAll();
+        Usuario root = new Usuario();
+        usuarios.remove(root);
+
+        return usuarios;
     }
 
     public boolean update(Usuario usuario) {
+
+        validateId(usuario.getId());
+
         System.out.println(usuario + "estah sendo atualizado");
 
         if (repositorio.exists(usuario.getId())) {
@@ -40,6 +52,7 @@ public class ControleUsuario {
     }
 
     public boolean delete(Long id) {
+        validateId(id);
         if (repositorio.exists(id)) {
             repositorio.delete(id);
             return true;
@@ -47,7 +60,16 @@ public class ControleUsuario {
         return false;
     }
 
-    public List<Usuario> getByFuncao(FuncaoUsuario tipo){
-        return repositorio.findByFuncao(tipo.toString());
+    public List<Usuario> getByFuncao(FuncaoUsuario tipo) {
+        return repositorio.findByFuncao(tipo);
+    }
+
+    public void validateId(Long id) {
+        if(id == null) return;
+
+        if (id == 1) {
+            throw new RuntimeException("Invalid id: " + id);
+        }
+
     }
 }
