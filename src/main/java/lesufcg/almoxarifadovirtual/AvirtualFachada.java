@@ -19,20 +19,11 @@ public class AvirtualFachada {
     //Métodos de Usuários
     @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-        try {
-            return ResponseEntity.ok(controle.criarUsuario(usuario));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
+    public Usuario criarUsuario(@RequestBody Usuario usuario) { return controle.criarUsuario(usuario);}
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<Usuario> getUsuario(@PathVariable Long id) {
-        return ResponseEntity.ok(controle.getUsuario(id));
-    }
+    public Usuario getUsuario(@PathVariable Long id) {return controle.getUsuario(id);}
 
     @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
     @ResponseBody
@@ -69,5 +60,4 @@ public class AvirtualFachada {
     public List<Usuario> listarPrestadores() {
         return controle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR);
     }
-
 }
