@@ -1,7 +1,6 @@
-Ele esta tentando testar o que nao existe no projeto e por este motivo nao consegui finalizar a suite de testes (classe de Controle).
-Melhor cobertura alcançada até então, nos testes incompletos: 75%
+Esta tentando testar o que nao existe e por este motivo nao conseguiu finalizar a suite de testes (classe de Controle).
+Melhor cobertura alcançada até então: 75%  (testes incompletos)
 
-
-Isso será revisto e solucionado em breve
+Isso será revisto e solucionado em breve.
 
 
