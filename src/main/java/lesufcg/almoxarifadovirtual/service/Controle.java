@@ -1,4 +1,4 @@
-package lesufcg.almoxarifadovirtual.controle;
+package lesufcg.almoxarifadovirtual.service;
 
 import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
 import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;

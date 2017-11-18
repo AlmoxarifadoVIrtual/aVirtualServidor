@@ -1,11 +1,9 @@
-package lesufcg.almoxarifadovirtual;
+package lesufcg.almoxarifadovirtual.controle;
 
-import lesufcg.almoxarifadovirtual.controle.Controle;
+import lesufcg.almoxarifadovirtual.service.Controle;
 import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
 import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
