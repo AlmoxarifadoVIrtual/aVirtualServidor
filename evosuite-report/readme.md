@@ -1,4 +1,4 @@
 Cobertura 70%
 
 
-Isso será revio e melhorado em breve
+Isso será revisado e melhorias virão em breve
