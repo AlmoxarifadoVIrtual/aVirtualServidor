@@ -1,15 +1,15 @@
-package lesufcg.almoxarifadovirtual.controle;
+package almoxarifadovirtual.servidor.servico;
 
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
-import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
-import lesufcg.almoxarifadovirtual.repositorio.RepositorioUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.repositorio.RepositorioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ControleUsuario {
+public class ServicoUsuario {
 
     @Autowired
     private RepositorioUsuario repositorio;

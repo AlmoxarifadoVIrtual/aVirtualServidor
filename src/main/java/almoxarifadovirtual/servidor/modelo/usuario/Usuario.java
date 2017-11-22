@@ -1,4 +1,4 @@
-package lesufcg.almoxarifadovirtual.modelo.usuario;
+package almoxarifadovirtual.servidor.modelo.usuario;
 
 import org.hibernate.validator.constraints.NotEmpty;
 

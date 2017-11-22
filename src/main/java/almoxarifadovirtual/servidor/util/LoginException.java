@@ -1,4 +1,4 @@
-package lesufcg.almoxarifadovirtual.util;
+package almoxarifadovirtual.servidor.util;
 
 public class LoginException extends RuntimeException{
 

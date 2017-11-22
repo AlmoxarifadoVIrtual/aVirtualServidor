@@ -1,31 +1,31 @@
-package lesufcg.almoxarifadovirtual.controle;
+package almoxarifadovirtual.servidor.servico;
 
-import lesufcg.almoxarifadovirtual.modelo.autenticacao.Credenciais;
-import lesufcg.almoxarifadovirtual.modelo.autenticacao.Token;
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
-import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
-import lesufcg.almoxarifadovirtual.util.LoginException;
-import lesufcg.almoxarifadovirtual.util.PermissaoException;
+import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
+import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.util.LoginException;
+import almoxarifadovirtual.servidor.util.PermissaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class Controle {
+public class ServicoControle {
 
     @Autowired
-    private ControleUsuario controleUsuario;
+    private ServicoUsuario servicoUsuario;
 
     @Autowired
-    private AutenticacaoControle autenticacaoControle;
+    private ServicoAutenticacao servicoAutenticacao;
 
     public String logIn(Credenciais credenciais){
 
-        Usuario usuario = controleUsuario.get(credenciais.getLogin());
+        Usuario usuario = servicoUsuario.get(credenciais.getLogin());
 
         if(usuario != null){
-            Token token = autenticacaoControle.gerarToken(usuario.getId());
+            Token token = servicoAutenticacao.gerarToken(usuario.getId());
             return token.getChave();
         }
 
@@ -37,7 +37,7 @@ public class Controle {
 
     public Usuario criarUsuario(Usuario usuario, String chave) {
         if (validarToken(chave) && validarAdmin(chave)) {
-            return controleUsuario.create(usuario);
+            return servicoUsuario.create(usuario);
         }
         return null;
     }
@@ -45,7 +45,7 @@ public class Controle {
     public Usuario getUsuario(Long id, String chave) {
 
         if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
-            return controleUsuario.get(id);
+            return servicoUsuario.get(id);
         }
 
         return null;
@@ -54,7 +54,7 @@ public class Controle {
     public List<Usuario> getAllUsuarios(String chave) {
 
         if (validarToken(chave) && validarAdmin(chave)) {
-            return controleUsuario.getAll();
+            return servicoUsuario.getAll();
         }
 
         return null;
@@ -63,7 +63,7 @@ public class Controle {
     public boolean atualizarUsuario(Usuario usuario, String chave) {
 
         if (validarToken(chave) && validarAdmin(chave)) {
-            return controleUsuario.update(usuario);
+            return servicoUsuario.update(usuario);
         }
 
         return false;
@@ -72,7 +72,7 @@ public class Controle {
     public boolean deletarUsuario(Long id, String chave) {
 
         if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
-            return controleUsuario.delete(id);
+            return servicoUsuario.delete(id);
         }
 
         return false;
@@ -81,7 +81,7 @@ public class Controle {
     public List<Usuario> getUsuarioByFuncao(FuncaoUsuario tipo, String chave) {
 
         if (validarToken(chave) && validarAdmin(chave)) {
-            return controleUsuario.get(tipo);
+            return servicoUsuario.get(tipo);
         }
 
         return null;
@@ -90,32 +90,32 @@ public class Controle {
     //Métodos de autenticação
 
     public void deletarToken(Token token) {
-        autenticacaoControle.deletarToken(token);
+        servicoAutenticacao.deletarToken(token);
     }
 
     public Token getTokenByChave(String chave) {
-        return autenticacaoControle.getTokenByChave(chave);
+        return servicoAutenticacao.getTokenByChave(chave);
     }
 
     public Token getTokenByUsuarioId(Long usuarioId) {
-        return autenticacaoControle.getTokenByUsuarioId(usuarioId);
+        return servicoAutenticacao.getTokenByUsuarioId(usuarioId);
     }
 
     public Token gerarToken(Long usuarioId) {
-        return autenticacaoControle.gerarToken(usuarioId);
+        return servicoAutenticacao.gerarToken(usuarioId);
     }
 
     // Métodos auxiliares de validação
 
     private boolean validarToken(String chave) {
 
-        Token token = autenticacaoControle.getTokenByChave(chave);
+        Token token = servicoAutenticacao.getTokenByChave(chave);
 
         if (token == null)
             return false;
 
         else if (token.getExpirationDate().getTime() < System.currentTimeMillis()) {
-            autenticacaoControle.deletarToken(token);
+            servicoAutenticacao.deletarToken(token);
             return false;
 
         } else
@@ -124,8 +124,8 @@ public class Controle {
 
     private boolean validarAdmin(String chave) {
 
-        Token token = autenticacaoControle.getTokenByChave(chave);
-        Usuario usuario = controleUsuario.get(token.getUsuarioId());
+        Token token = servicoAutenticacao.getTokenByChave(chave);
+        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
 
         if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) return true;
         else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ADMINISTRADOR);
@@ -133,8 +133,8 @@ public class Controle {
 
     private boolean validarAlmoxarife(String chave) {
 
-        Token token = autenticacaoControle.getTokenByChave(chave);
-        Usuario usuario = controleUsuario.get(token.getUsuarioId());
+        Token token = servicoAutenticacao.getTokenByChave(chave);
+        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
 
         if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) return true;
         else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ALMOXARIFE);
@@ -142,8 +142,8 @@ public class Controle {
 
     private boolean validarPrestador(String chave) {
 
-        Token token = autenticacaoControle.getTokenByChave(chave);
-        Usuario usuario = controleUsuario.get(token.getUsuarioId());
+        Token token = servicoAutenticacao.getTokenByChave(chave);
+        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
 
         if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) return true;
         else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.PRESTADOR);
@@ -151,7 +151,7 @@ public class Controle {
 
     private boolean validarId(String chave, Long id) {
 
-        Token token = autenticacaoControle.getTokenByChave(chave);
+        Token token = servicoAutenticacao.getTokenByChave(chave);
         if (token.getUsuarioId() == id) return true;
         else throw new PermissaoException();
     }

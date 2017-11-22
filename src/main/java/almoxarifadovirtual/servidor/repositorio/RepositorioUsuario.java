@@ -1,7 +1,7 @@
-package lesufcg.almoxarifadovirtual.repositorio;
+package almoxarifadovirtual.servidor.repositorio;
 
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
-import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

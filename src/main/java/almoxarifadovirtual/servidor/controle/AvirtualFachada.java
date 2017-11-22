@@ -1,12 +1,10 @@
-package lesufcg.almoxarifadovirtual;
+package almoxarifadovirtual.servidor.controle;
 
-import lesufcg.almoxarifadovirtual.controle.Controle;
-import lesufcg.almoxarifadovirtual.modelo.autenticacao.Credenciais;
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
-import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.servico.ServicoControle;
+import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,56 +13,56 @@ import java.util.List;
 public class AvirtualFachada {
 
     @Autowired
-    private Controle controle;
+    private ServicoControle servicoControle;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public String login(@RequestBody Credenciais credenciais){
-        return controle.logIn(credenciais);
+        return servicoControle.logIn(credenciais);
     }
 
     //Métodos de Usuários
     @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
     @ResponseBody
-    public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String token) { return controle.criarUsuario(usuario, token);}
+    public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String token) { return servicoControle.criarUsuario(usuario, token);}
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Usuario getUsuario(@PathVariable Long id, @RequestHeader String token) {return controle.getUsuario(id, token);}
+    public Usuario getUsuario(@PathVariable Long id, @RequestHeader String token) {return servicoControle.getUsuario(id, token);}
 
     @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
     @ResponseBody
     public List<Usuario> getAll(@RequestHeader String token) {
-        return controle.getAllUsuarios(token);
+        return servicoControle.getAllUsuarios(token);
     }
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.PUT)
     @ResponseBody
     public boolean update(@RequestBody Usuario usuario, @RequestHeader String token) {
-        return controle.atualizarUsuario(usuario, token);
+        return servicoControle.atualizarUsuario(usuario, token);
     }
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public void delete(@PathVariable Long id, @RequestHeader String token) {
-        controle.deletarUsuario(id, token);
+        servicoControle.deletarUsuario(id, token);
     }
 
     @RequestMapping(value = "/usuarios/administradores", method = RequestMethod.GET)
     @ResponseBody
     public List<Usuario> listarAdministradores(@RequestHeader String token) {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
+        return servicoControle.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
     }
 
     @RequestMapping(value = "/usuario/almoxarifes", method = RequestMethod.GET)
     @ResponseBody
     public List<Usuario> listarAlmoxarifes(@RequestHeader String token) {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
+        return servicoControle.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
     }
 
     @RequestMapping(value = "/usuario/prestadores", method = RequestMethod.GET)
     @ResponseBody
     public List<Usuario> listarPrestadores(@RequestHeader String token) {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
+        return servicoControle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
     }
 }

@@ -1,4 +1,4 @@
-package lesufcg.almoxarifadovirtual.modelo.autenticacao;
+package almoxarifadovirtual.servidor.modelo.autenticacao;
 
 public class Credenciais {
 

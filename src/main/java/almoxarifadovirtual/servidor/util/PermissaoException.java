@@ -1,6 +1,6 @@
-package lesufcg.almoxarifadovirtual.util;
+package almoxarifadovirtual.servidor.util;
 
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 
 public class PermissaoException extends RuntimeException {
 
