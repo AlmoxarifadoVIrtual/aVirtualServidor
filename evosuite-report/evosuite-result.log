@@ -1,0 +1,145 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building almoxarifado-virtual 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ almoxarifado-virtual ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] Copying 0 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ almoxarifado-virtual ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ almoxarifado-virtual ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /home/xf/project/almoxarifado-virtual/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ almoxarifado-virtual ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 7 source files to /home/xf/project/almoxarifado-virtual/target/test-classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[34,51] no suitable method found for save(java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+    method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[169,45] no suitable method found for save(java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+    method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[219,45] no suitable method found for save(java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+    method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[260,56] no suitable method found for save(java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+    method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+    method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+      (inference variable T has incompatible bounds
+        equality constraints: java.lang.Object
+        upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[INFO] 4 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.179 s
+[INFO] Finished at: 2017-11-18T08:43:51-03:00
+[INFO] Final Memory: 33M/271M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.1:testCompile (default-testCompile) on project almoxarifado-virtual: Compilation failure: Compilation failure:
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[34,51] no suitable method found for save(java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[169,45] no suitable method found for save(java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[219,45] no suitable method found for save(java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] /home/xf/project/almoxarifado-virtual/src/test/java/lesufcg/almoxarifadovirtual/controle/ControleUsuario_ESTest.java:[260,56] no suitable method found for save(java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(S) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: S,lesufcg.almoxarifadovirtual.modelo.usuario.Usuario,java.lang.Object)
+[ERROR] method org.springframework.data.repository.CrudRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] method org.springframework.data.jpa.repository.JpaRepository.<S>save(java.lang.Iterable<S>) is not applicable
+[ERROR] (inference variable T has incompatible bounds
+[ERROR] equality constraints: java.lang.Object
+[ERROR] upper bounds: java.lang.Iterable<S>,java.lang.Object)
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

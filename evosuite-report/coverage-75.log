@@ -1,0 +1,25 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building almoxarifado-virtual 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- evosuite-maven-plugin:1.0.5:info (default-cli) @ almoxarifado-virtual ---
+[INFO] Going to query EvoSuite info on current project
+[INFO] SLF4J: Class path contains multiple SLF4J bindings.
+[INFO] SLF4J: Found binding in [jar:file:/home/xf/.m2/repository/org/evosuite/evosuite-master/1.0.5/evosuite-master-1.0.5.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+[INFO] SLF4J: Found binding in [jar:file:/home/xf/.m2/repository/ch/qos/logback/logback-classic/1.1.3/logback-classic-1.1.3.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+[INFO] SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+[INFO] SLF4J: Actual binding is of type [ch.qos.logback.classic.util.ContextSelectorStaticBinder]
+[INFO] * EvoSuite 1.0.5
+[INFO] Total number of classes in the project: 4
+[INFO] Number of classes in the project that are testable: 4
+[INFO] Number of generated test suites: 3
+[INFO] Overall coverage: 0.70375
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1.757 s
+[INFO] Finished at: 2017-11-18T08:42:59-03:00
+[INFO] Final Memory: 28M/334M
+[INFO] ------------------------------------------------------------------------
