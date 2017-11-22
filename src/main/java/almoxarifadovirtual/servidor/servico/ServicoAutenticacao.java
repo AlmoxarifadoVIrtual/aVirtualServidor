@@ -2,6 +2,7 @@ package almoxarifadovirtual.servidor.servico;
 
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
 import almoxarifadovirtual.servidor.repositorio.RepositorioToken;
+import almoxarifadovirtual.servidor.util.TokenException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,4 +26,17 @@ public class ServicoAutenticacao {
         return repository.save(new Token(usuarioId));
     }
 
+    public boolean validarToken(String chave) {
+        Token token = getTokenByChave(chave);
+
+        if (token == null)
+            throw new TokenException();
+
+        else if (token.getExpirationDate().getTime() < System.currentTimeMillis()) {
+            deletarToken(token);
+            throw new TokenException(token.getExpirationDate().toString());
+
+        } else return true;
+
+    }
 }

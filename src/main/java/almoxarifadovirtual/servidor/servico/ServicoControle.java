@@ -105,22 +105,11 @@ public class ServicoControle {
         return servicoAutenticacao.gerarToken(usuarioId);
     }
 
-    // Métodos auxiliares de validação
-
     private boolean validarToken(String chave) {
-
-        Token token = servicoAutenticacao.getTokenByChave(chave);
-
-        if (token == null)
-            return false;
-
-        else if (token.getExpirationDate().getTime() < System.currentTimeMillis()) {
-            servicoAutenticacao.deletarToken(token);
-            return false;
-
-        } else
-            return true;
+        return this.servicoAutenticacao.validarToken(chave);
     }
+
+    // Métodos auxiliares de validação
 
     private boolean validarAdmin(String chave) {
 
