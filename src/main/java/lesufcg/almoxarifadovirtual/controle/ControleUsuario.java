@@ -27,6 +27,15 @@ public class ControleUsuario {
         return repositorio.findOne(id);
     }
 
+    public Usuario get(String nome) {
+        return repositorio.findByNome(nome);
+    }
+
+    public List<Usuario> get(FuncaoUsuario tipo) {
+        return repositorio.findByFuncao(tipo);
+    }
+
+
     public List<Usuario> getAll() {
         return repositorio.findAll();
     }
@@ -48,10 +57,6 @@ public class ControleUsuario {
             return true;
         }
         return false;
-    }
-
-    public List<Usuario> getByFuncao(FuncaoUsuario tipo) {
-        return repositorio.findByFuncao(tipo);
     }
 
 }

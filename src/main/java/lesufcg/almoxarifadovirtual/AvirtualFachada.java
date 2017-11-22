@@ -16,48 +16,54 @@ public class AvirtualFachada {
     @Autowired
     private Controle controle;
 
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public String login(@RequestBody String login, @RequestBody String senha){
+        return controle.logIn(login, senha);
+    }
+    
     //Métodos de Usuários
     @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
     @ResponseBody
-    public Usuario criarUsuario(@RequestBody Usuario usuario) { return controle.criarUsuario(usuario);}
+    public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String token) { return controle.criarUsuario(usuario, token);}
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public Usuario getUsuario(@PathVariable Long id) {return controle.getUsuario(id);}
+    public Usuario getUsuario(@PathVariable Long id, @RequestHeader String token) {return controle.getUsuario(id, token);}
 
     @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
     @ResponseBody
-    public List<Usuario> getAll() {
-        return controle.getAllUsuarios();
+    public List<Usuario> getAll(@RequestHeader String token) {
+        return controle.getAllUsuarios(token);
     }
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public boolean update(@PathVariable Usuario usuario) {
-        return controle.atualizarUsuario(usuario);
+    public boolean update(@RequestBody Usuario usuario, @RequestHeader String token) {
+        return controle.atualizarUsuario(usuario, token);
     }
 
     @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public void delete(@PathVariable Long id) {
-        controle.deletarUsuario(id);
+    public void delete(@PathVariable Long id, @RequestHeader String token) {
+        controle.deletarUsuario(id, token);
     }
 
     @RequestMapping(value = "/usuarios/administradores", method = RequestMethod.GET)
     @ResponseBody
-    public List<Usuario> listarAdministradores() {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR);
+    public List<Usuario> listarAdministradores(@RequestHeader String token) {
+        return controle.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
     }
 
     @RequestMapping(value = "/usuario/almoxarifes", method = RequestMethod.GET)
     @ResponseBody
-    public List<Usuario> listarAlmoxarifes() {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE);
+    public List<Usuario> listarAlmoxarifes(@RequestHeader String token) {
+        return controle.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
     }
 
     @RequestMapping(value = "/usuario/prestadores", method = RequestMethod.GET)
     @ResponseBody
-    public List<Usuario> listarPrestadores() {
-        return controle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR);
+    public List<Usuario> listarPrestadores(@RequestHeader String token) {
+        return controle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
     }
 }

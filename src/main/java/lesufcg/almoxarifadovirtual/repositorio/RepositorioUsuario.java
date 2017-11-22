@@ -12,7 +12,8 @@ import java.util.List;
 public interface RepositorioUsuario extends JpaRepository<Usuario, Long> {
 
 
-    Usuario findUsuarioByNome(String nome);
+    Usuario findByNome(String nome);
+
     /**
      * Método que retorna o cliente com apenas seu nome fazendo a busca com o id passado como parâmetro.
      *
