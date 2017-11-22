@@ -9,6 +9,7 @@ import almoxarifadovirtual.servidor.util.PermissaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,10 +22,12 @@ public class ServicoControle {
     private ServicoAutenticacao servicoAutenticacao;
 
     public String logIn(Credenciais credenciais){
-
+        if(!ehUsuarioLdap(credenciais))
+            throw new LoginException();
+        
         Usuario usuario = servicoUsuario.get(credenciais.getLogin());
 
-        if(usuario != null){
+        if(usuario != null) {
             Token token = servicoAutenticacao.gerarToken(usuario.getId());
             return token.getChave();
         }
@@ -143,5 +146,25 @@ public class ServicoControle {
         Token token = servicoAutenticacao.getTokenByChave(chave);
         if (token.getUsuarioId() == id) return true;
         else throw new PermissaoException();
+    }
+
+
+    private boolean ehUsuarioLdap(Credenciais credenciais) {
+        // Mock da parte de login com uma lista
+        List<String[]> usuariosLdap = new ArrayList<String[]>();
+        usuariosLdap.add(new String[]{"Matteus", "passwd-admin"});
+        usuariosLdap.add(new String[]{"Alessandro", "passwd-almoxarife"});
+        usuariosLdap.add(new String[]{"Lucas", "passwd-almoxarife"});
+        usuariosLdap.add(new String[]{"Bernardi", "passwd-prestador"});
+        usuariosLdap.add(new String[]{"Rafael", "passwd-prestador"});
+
+        boolean ehUsuarioValido = false;
+        for (String[] item : usuariosLdap) {
+            if(item[0].equals(credenciais.getLogin()) && item[1].equals(credenciais.getSenha())) {
+                ehUsuarioValido = true;
+                break;
+            }
+        }
+        return ehUsuarioValido;
     }
 }
