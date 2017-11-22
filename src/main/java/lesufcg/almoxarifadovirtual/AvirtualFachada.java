@@ -1,6 +1,7 @@
 package lesufcg.almoxarifadovirtual;
 
 import lesufcg.almoxarifadovirtual.controle.Controle;
+import lesufcg.almoxarifadovirtual.modelo.autenticacao.Credenciais;
 import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
 import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ public class AvirtualFachada {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestBody String login, @RequestBody String senha){
-        return controle.logIn(login, senha);
+    public String login(@RequestBody Credenciais credenciais){
+        return controle.logIn(credenciais);
     }
-    
+
     //Métodos de Usuários
     @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
     @ResponseBody

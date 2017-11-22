@@ -1,5 +1,6 @@
 package lesufcg.almoxarifadovirtual.controle;
 
+import lesufcg.almoxarifadovirtual.modelo.autenticacao.Credenciais;
 import lesufcg.almoxarifadovirtual.modelo.autenticacao.Token;
 import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
 import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
@@ -15,14 +16,17 @@ public class Controle {
 
     @Autowired
     private ControleUsuario controleUsuario;
+
+    @Autowired
     private AutenticacaoControle autenticacaoControle;
 
+    public String logIn(Credenciais credenciais){
 
-    public String logIn(String login, String senha){
-        Usuario usuario = controleUsuario.get(login);
+        Usuario usuario = controleUsuario.get(credenciais.getLogin());
 
         if(usuario != null){
-            return autenticacaoControle.gerarToken(usuario.getId()).getChave();
+            Token token = autenticacaoControle.gerarToken(usuario.getId());
+            return token.getChave();
         }
 
         else throw new LoginException();
