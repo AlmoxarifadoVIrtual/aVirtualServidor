@@ -21,18 +21,16 @@ public class ServicoControle {
     @Autowired
     private ServicoAutenticacao servicoAutenticacao;
 
-    public String logIn(Credenciais credenciais){
-        if(!ehUsuarioLdap(credenciais))
+    public String logIn(Credenciais credenciais) {
+        if (!ehUsuarioLdap(credenciais))
             throw new LoginException();
-        
+
         Usuario usuario = servicoUsuario.get(credenciais.getLogin());
 
-        if(usuario != null) {
+        if (usuario != null) {
             Token token = servicoAutenticacao.gerarToken(usuario.getId());
             return token.getChave();
-        }
-
-        else throw new LoginException();
+        } else throw new LoginException();
 
     }
 
@@ -155,12 +153,12 @@ public class ServicoControle {
         usuariosLdap.add(new String[]{"Matteus", "passwd-admin"});
         usuariosLdap.add(new String[]{"Alessandro", "passwd-almoxarife"});
         usuariosLdap.add(new String[]{"Lucas", "passwd-almoxarife"});
-        usuariosLdap.add(new String[]{"Bernardi", "passwd-prestador"});
+        usuariosLdap.add(new String[]{"Bernard", "passwd-prestador"});
         usuariosLdap.add(new String[]{"Rafael", "passwd-prestador"});
 
         boolean ehUsuarioValido = false;
-        for (String[] item : usuariosLdap) {
-            if(item[0].equals(credenciais.getLogin()) && item[1].equals(credenciais.getSenha())) {
+        for (String[] usuario : usuariosLdap) {
+            if (usuario[0].equals(credenciais.getLogin()) && usuario[1].equals(credenciais.getSenha())) {
                 ehUsuarioValido = true;
                 break;
             }
