@@ -21,6 +21,12 @@ public class AvirtualFachada {
         return servicoControle.logIn(credenciais);
     }
 
+    @RequestMapping(value = "/login", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void logout(@RequestHeader String token){
+        servicoControle.logOut(token);
+    }
+
     //Métodos de Usuários
     @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
     @ResponseBody
