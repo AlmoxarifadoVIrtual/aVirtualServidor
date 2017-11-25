@@ -34,6 +34,11 @@ public class ServicoControle {
 
     }
 
+    public void logOut(String chave){
+        Token token = servicoAutenticacao.getTokenByChave(chave);
+        if (token != null) servicoAutenticacao.deletarToken(token);
+    }
+
     //Métodos do Usuário
 
     public Usuario criarUsuario(Usuario usuario, String chave) {

@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.*;
 
 @Entity(name = "Usuario")
-@Table(name = "usuario")
+@Table(name = "tb_usuario")
 public class Usuario {
 
     @Id
