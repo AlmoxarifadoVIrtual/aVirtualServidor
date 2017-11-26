@@ -1,7 +1,7 @@
-package lesufcg.almoxarifadovirtual.repositorio;
+package almoxarifadovirtual.servidor.repositorio;
 
-import lesufcg.almoxarifadovirtual.modelo.usuario.FuncaoUsuario;
-import lesufcg.almoxarifadovirtual.modelo.usuario.Usuario;
+import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
+import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,7 +12,8 @@ import java.util.List;
 public interface RepositorioUsuario extends JpaRepository<Usuario, Long> {
 
 
-    Usuario findUsuarioByNome(String nome);
+    Usuario findByNome(String nome);
+
     /**
      * Método que retorna o cliente com apenas seu nome fazendo a busca com o id passado como parâmetro.
      *
