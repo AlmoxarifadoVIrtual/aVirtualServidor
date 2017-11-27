@@ -32,11 +32,12 @@ public class ServicoAutenticacao {
         if (token == null)
             throw new TokenException();
 
-        else if (token.getExpirationDate().getTime() < System.currentTimeMillis()) {
+        else if (token.validarToken())
+            return true;
+
+        else {
             deletarToken(token);
-            throw new TokenException(token.getExpirationDate().toString());
-
-        } else return true;
-
+            throw new TokenException(token.getExpirationDate());
+        }
     }
 }
