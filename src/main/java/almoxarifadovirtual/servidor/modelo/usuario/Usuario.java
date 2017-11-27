@@ -1,8 +1,13 @@
 package almoxarifadovirtual.servidor.modelo.usuario;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
 
 @Entity(name = "Usuario")
 @Table(name = "tb_usuario")
@@ -19,6 +24,12 @@ public class Usuario {
     @Column(nullable = false)
     private FuncaoUsuario funcao;
 
+    /**
+     * Construtor do objeto que representa um usuário do sistema.
+     * @param nome - String que representa o nome do usuário.
+     * @param tipoUsuario - Enum que representa o tipo de usuário
+     *                      e define seu nível de acesso no sistema.
+     */
     public Usuario(String nome, FuncaoUsuario tipoUsuario) {
         this.nome = nome;
         this.funcao = tipoUsuario;
@@ -52,12 +63,21 @@ public class Usuario {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Usuario usuario = (Usuario) o;
 
-        if (!getNome().equals(usuario.getNome())) return false;
+        if (!getNome().equals(usuario.getNome())) {
+            return false;
+        }
+
         return getFuncao() == usuario.getFuncao();
     }
 

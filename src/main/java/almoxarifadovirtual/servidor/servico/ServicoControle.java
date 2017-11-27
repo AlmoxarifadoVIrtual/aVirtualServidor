@@ -142,7 +142,7 @@ public class ServicoControle {
     private boolean validarId(String chave, Long id) {
 
         Token token = servicoAutenticacao.getTokenByChave(chave);
-        if (token.getUsuarioId() == id) return true;
+        if (token.getUsuarioId().equals(id)) return true;
         else throw new PermissaoException();
     }
 

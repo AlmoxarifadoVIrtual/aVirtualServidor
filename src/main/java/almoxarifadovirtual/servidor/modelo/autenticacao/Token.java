@@ -1,14 +1,19 @@
 package almoxarifadovirtual.servidor.modelo.autenticacao;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity(name = "Token")
 @Table(name = "tb_token")
 public class Token {
 
-    private final int UMA_HORA = 1;
+    private static final int UMA_HORA = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,7 +28,11 @@ public class Token {
     @Column(unique = true)
     private Long usuarioId;
 
-    public Token(Long usuarioId){
+    /**
+     * Construtor do objeto Token que é utilizado para validar uma seção de usuário após o login.
+     * @param usuarioId - Id do usuário que solicitou a conexão ao sistema.
+     */
+    public Token(Long usuarioId) {
         setExpirationDate(LocalDateTime.now().plusHours(UMA_HORA));
         setChave(UUID.randomUUID().toString());
         setUsuarioId(usuarioId);
@@ -64,5 +73,14 @@ public class Token {
         this.usuarioId = usuarioId;
     }
 
-    public boolean validarToken(){ return this.expirationDate.compareTo(LocalDateTime.now().toString()) < 0;}
+    /**
+    * Método que realiza a validação do token considerando sua data de validade.
+    * @return True caso a dava de validade seja menor que a data local atual,
+    * e False caso contrário.
+    */
+    public boolean validarToken() {
+
+        String now = LocalDateTime.now().toString();
+        return this.expirationDate.compareTo(now) < 0;
+    }
 }
