@@ -89,20 +89,15 @@ public class ServicoControle {
 
   public boolean atualizarUsuario(Usuario usuario, String chave) {
 
-    if (validarToken(chave) && validarAdmin(chave)) {
-      return servicoUsuario.update(usuario);
-    }
+    return validarToken(chave) && validarAdmin(chave) && servicoUsuario.update(usuario);
 
-    return false;
   }
 
   public boolean deletarUsuario(Long id, String chave) {
 
-    if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
-      return servicoUsuario.delete(id);
-    }
+    return validarToken(chave) && (validarAdmin(chave) || validarId(chave, id)) && servicoUsuario
+        .delete(id);
 
-    return false;
   }
 
   public List<Usuario> getUsuarioByFuncao(FuncaoUsuario tipo, String chave) {
@@ -202,5 +197,12 @@ public class ServicoControle {
       }
     }
     return ehUsuarioValido;
+  }
+
+  public void logout(String chave) {
+    Token token = servicoAutenticacao.getTokenByChave(chave);
+    if (token != null) {
+      servicoAutenticacao.deletarToken(token);
+    }
   }
 }
