@@ -6,11 +6,11 @@ import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.util.LoginException;
 import almoxarifadovirtual.servidor.util.PermissaoException;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ServicoControle {
@@ -21,6 +21,14 @@ public class ServicoControle {
   @Autowired
   private ServicoAutenticacao servicoAutenticacao;
 
+  /**
+   * Método que valida o login e gera uma chave com duração de 01 hora para o usuário utilizar o
+   * sistema.
+   *
+   * @param credenciais - Objeto que contém o login e a senha do usuário.
+   * @return Uma chave do tipo String que será utilizada para validação do acesso do usuário ao
+   *         sistema.
+   */
   public String logIn(Credenciais credenciais) {
     if (!ehUsuarioLdap(credenciais)) {
       throw new LoginException();
@@ -39,6 +47,13 @@ public class ServicoControle {
 
   //Métodos do Usuário
 
+  /**
+   * Método utilizado para realizar a criação de um novo usuário no sistema.
+   *
+   * @param usuario - Objeto contendo os dados do usuário a ser criado.
+   * @param chave - String utilizada para validar a autorização do requerente em executar a ação.
+   * @return Um objeto do tipo Usuario conforme armazenado pelo sistema.
+   */
   public Usuario criarUsuario(Usuario usuario, String chave) {
     if (validarToken(chave) && validarAdmin(chave)) {
       return servicoUsuario.create(usuario);
@@ -46,6 +61,14 @@ public class ServicoControle {
     return null;
   }
 
+  /**
+   * Método para recuperar as informações de um usuário do sistema.
+   *
+   * @param id - Valor da id do usuário do tipo Long.
+   * @param chave - String utilizada para validar a autorização do requerente em executar a ação.
+   * @return Se o usuário existir, e a chave tiver autorização para a operação, o usuário relativo
+   *         ao id é retornado, caso contrário o retorno é null.
+   */
   public Usuario getUsuario(Long id, String chave) {
 
     if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {

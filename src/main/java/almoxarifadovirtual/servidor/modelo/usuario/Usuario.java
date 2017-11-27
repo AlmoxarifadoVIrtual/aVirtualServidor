@@ -29,7 +29,7 @@ public class Usuario {
    *
    * @param nome - String que representa o nome do usuário.
    * @param tipoUsuario - Enum que representa o tipo de usuário e define seu nível de acesso no
-   * sistema.
+   *                      sistema.
    */
   public Usuario(String nome, FuncaoUsuario tipoUsuario) {
     this.nome = nome;

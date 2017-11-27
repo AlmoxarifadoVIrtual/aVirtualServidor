@@ -28,6 +28,11 @@ public class ServicoAutenticacao {
     return repository.save(new Token(usuarioId));
   }
 
+  /**
+   * Método que realiza a validação do token considerando sua data de validade.
+   *
+   * @return True caso a dava de validade seja menor que a data local atual, e False caso contrário.
+   */
   public boolean validarToken(String chave) {
     Token token = getTokenByChave(chave);
 

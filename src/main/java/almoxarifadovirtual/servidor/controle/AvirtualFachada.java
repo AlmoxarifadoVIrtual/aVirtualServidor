@@ -23,7 +23,7 @@ public class AvirtualFachada {
 
   @RequestMapping(value = "/login", method = RequestMethod.POST)
   @ResponseBody
-  public String login(@RequestBody Credenciais credenciais) {
+     public String login(@RequestBody Credenciais credenciais) {
     return servicoControle.logIn(credenciais);
   }
 

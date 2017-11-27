@@ -3,10 +3,10 @@ package almoxarifadovirtual.servidor.servico;
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.repositorio.RepositorioUsuario;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class ServicoUsuario {
@@ -40,9 +40,12 @@ public class ServicoUsuario {
     return repositorio.findAll();
   }
 
+  /**
+   * Método que atualiza dos dados de um usuário.
+   * @param usuario - Objeto do tipo Usuario com as informações atualizadas.
+   * @return Um boolean True caso o usuário exista, e false caso contrário.
+   */
   public boolean update(Usuario usuario) {
-
-    System.out.println(usuario + "estah sendo atualizado");
 
     if (repositorio.exists(usuario.getId())) {
       repositorio.save(usuario);
@@ -51,6 +54,11 @@ public class ServicoUsuario {
     return false;
   }
 
+  /**
+   * Método que remove um usuário do sistema.
+   * @param id - Valor que identifica o usuário do tipo Long.
+   * @return True se o usuário existir, ou False caso contrário.
+   */
   public boolean delete(Long id) {
     if (repositorio.exists(id)) {
       repositorio.delete(id);
