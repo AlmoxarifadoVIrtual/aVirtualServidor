@@ -12,14 +12,14 @@ import java.util.List;
 public interface RepositorioUsuario extends JpaRepository<Usuario, Long> {
 
 
-    Usuario findByNome(String nome);
+  Usuario findByNome(String nome);
 
-    /**
-     * Método que retorna o cliente com apenas seu nome fazendo a busca com o id passado como parâmetro.
-     *
-     * @param funcao
-     * @return lista de usuarios com a funcao passada como parametro.
-     */
-    @Query("SELECT usr FROM Usuario usr where usr.funcao = :funcao")
-    List<Usuario> findByFuncao(@Param("funcao") FuncaoUsuario funcao);
+  /**
+   * Método que retorna o cliente com apenas seu nome fazendo a busca com o id passado como
+   * parâmetro.
+   *
+   * @return lista de usuarios com a funcao passada como parametro.
+   */
+  @Query("SELECT usr FROM Usuario usr where usr.funcao = :funcao")
+  List<Usuario> findByFuncao(@Param("funcao") FuncaoUsuario funcao);
 }

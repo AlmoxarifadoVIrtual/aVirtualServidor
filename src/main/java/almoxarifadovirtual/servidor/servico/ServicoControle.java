@@ -15,154 +15,169 @@ import java.util.List;
 @Service
 public class ServicoControle {
 
-    @Autowired
-    private ServicoUsuario servicoUsuario;
+  @Autowired
+  private ServicoUsuario servicoUsuario;
 
-    @Autowired
-    private ServicoAutenticacao servicoAutenticacao;
+  @Autowired
+  private ServicoAutenticacao servicoAutenticacao;
 
-    public String logIn(Credenciais credenciais) {
-        if (!ehUsuarioLdap(credenciais))
-            throw new LoginException();
-
-        Usuario usuario = servicoUsuario.get(credenciais.getLogin());
-
-        if (usuario != null) {
-            Token token = servicoAutenticacao.gerarToken(usuario.getId());
-            return token.getChave();
-        } else throw new LoginException();
-
+  public String logIn(Credenciais credenciais) {
+    if (!ehUsuarioLdap(credenciais)) {
+      throw new LoginException();
     }
 
-    //Métodos do Usuário
+    Usuario usuario = servicoUsuario.get(credenciais.getLogin());
 
-    public Usuario criarUsuario(Usuario usuario, String chave) {
-        if (validarToken(chave) && validarAdmin(chave)) {
-            return servicoUsuario.create(usuario);
-        }
-        return null;
+    if (usuario != null) {
+      Token token = servicoAutenticacao.gerarToken(usuario.getId());
+      return token.getChave();
+    } else {
+      throw new LoginException();
     }
 
-    public Usuario getUsuario(Long id, String chave) {
+  }
 
-        if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
-            return servicoUsuario.get(id);
-        }
+  //Métodos do Usuário
 
-        return null;
+  public Usuario criarUsuario(Usuario usuario, String chave) {
+    if (validarToken(chave) && validarAdmin(chave)) {
+      return servicoUsuario.create(usuario);
+    }
+    return null;
+  }
+
+  public Usuario getUsuario(Long id, String chave) {
+
+    if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
+      return servicoUsuario.get(id);
     }
 
-    public List<Usuario> getAllUsuarios(String chave) {
+    return null;
+  }
 
-        if (validarToken(chave) && validarAdmin(chave)) {
-            return servicoUsuario.getAll();
-        }
+  public List<Usuario> getAllUsuarios(String chave) {
 
-        return null;
+    if (validarToken(chave) && validarAdmin(chave)) {
+      return servicoUsuario.getAll();
     }
 
-    public boolean atualizarUsuario(Usuario usuario, String chave) {
+    return null;
+  }
 
-        if (validarToken(chave) && validarAdmin(chave)) {
-            return servicoUsuario.update(usuario);
-        }
+  public boolean atualizarUsuario(Usuario usuario, String chave) {
 
-        return false;
+    if (validarToken(chave) && validarAdmin(chave)) {
+      return servicoUsuario.update(usuario);
     }
 
-    public boolean deletarUsuario(Long id, String chave) {
+    return false;
+  }
 
-        if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
-            return servicoUsuario.delete(id);
-        }
+  public boolean deletarUsuario(Long id, String chave) {
 
-        return false;
+    if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
+      return servicoUsuario.delete(id);
     }
 
-    public List<Usuario> getUsuarioByFuncao(FuncaoUsuario tipo, String chave) {
+    return false;
+  }
 
-        if (validarToken(chave) && validarAdmin(chave)) {
-            return servicoUsuario.get(tipo);
-        }
+  public List<Usuario> getUsuarioByFuncao(FuncaoUsuario tipo, String chave) {
 
-        return null;
+    if (validarToken(chave) && validarAdmin(chave)) {
+      return servicoUsuario.get(tipo);
     }
 
-    //Métodos de autenticação
+    return null;
+  }
 
-    public void deletarToken(Token token) {
-        servicoAutenticacao.deletarToken(token);
+  //Métodos de autenticação
+
+  public void deletarToken(Token token) {
+    servicoAutenticacao.deletarToken(token);
+  }
+
+  public Token getTokenByChave(String chave) {
+    return servicoAutenticacao.getTokenByChave(chave);
+  }
+
+  public Token getTokenByUsuarioId(Long usuarioId) {
+    return servicoAutenticacao.getTokenByUsuarioId(usuarioId);
+  }
+
+  public Token gerarToken(Long usuarioId) {
+    return servicoAutenticacao.gerarToken(usuarioId);
+  }
+
+  private boolean validarToken(String chave) {
+    return this.servicoAutenticacao.validarToken(chave);
+  }
+
+  // Métodos auxiliares de validação
+
+  private boolean validarAdmin(String chave) {
+
+    Token token = servicoAutenticacao.getTokenByChave(chave);
+    Usuario usuario = servicoUsuario.get(token.getUsuarioId());
+
+    if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ADMINISTRADOR);
     }
+  }
 
-    public Token getTokenByChave(String chave) {
-        return servicoAutenticacao.getTokenByChave(chave);
+  private boolean validarAlmoxarife(String chave) {
+
+    Token token = servicoAutenticacao.getTokenByChave(chave);
+    Usuario usuario = servicoUsuario.get(token.getUsuarioId());
+
+    if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ALMOXARIFE);
     }
+  }
 
-    public Token getTokenByUsuarioId(Long usuarioId) {
-        return servicoAutenticacao.getTokenByUsuarioId(usuarioId);
+  private boolean validarPrestador(String chave) {
+
+    Token token = servicoAutenticacao.getTokenByChave(chave);
+    Usuario usuario = servicoUsuario.get(token.getUsuarioId());
+
+    if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.PRESTADOR);
     }
+  }
 
-    public Token gerarToken(Long usuarioId) {
-        return servicoAutenticacao.gerarToken(usuarioId);
+  private boolean validarId(String chave, Long id) {
+
+    Token token = servicoAutenticacao.getTokenByChave(chave);
+    if (token.getUsuarioId().equals(id)) {
+      return true;
+    } else {
+      throw new PermissaoException();
     }
+  }
 
-    private boolean validarToken(String chave) {
-        return this.servicoAutenticacao.validarToken(chave);
+
+  private boolean ehUsuarioLdap(Credenciais credenciais) {
+    // Mock da parte de login com uma lista
+    List<String[]> usuariosLdap = new ArrayList<String[]>();
+    usuariosLdap.add(new String[]{"Matteus", "passwd-admin"});
+    usuariosLdap.add(new String[]{"Alessandro", "passwd-almoxarife"});
+    usuariosLdap.add(new String[]{"Lucas", "passwd-almoxarife"});
+    usuariosLdap.add(new String[]{"Bernard", "passwd-prestador"});
+    usuariosLdap.add(new String[]{"Rafael", "passwd-prestador"});
+
+    boolean ehUsuarioValido = false;
+    for (String[] usuario : usuariosLdap) {
+      if (usuario[0].equals(credenciais.getLogin()) && usuario[1].equals(credenciais.getSenha())) {
+        ehUsuarioValido = true;
+        break;
+      }
     }
-
-    // Métodos auxiliares de validação
-
-    private boolean validarAdmin(String chave) {
-
-        Token token = servicoAutenticacao.getTokenByChave(chave);
-        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
-
-        if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) return true;
-        else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ADMINISTRADOR);
-    }
-
-    private boolean validarAlmoxarife(String chave) {
-
-        Token token = servicoAutenticacao.getTokenByChave(chave);
-        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
-
-        if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) return true;
-        else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ALMOXARIFE);
-    }
-
-    private boolean validarPrestador(String chave) {
-
-        Token token = servicoAutenticacao.getTokenByChave(chave);
-        Usuario usuario = servicoUsuario.get(token.getUsuarioId());
-
-        if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) return true;
-        else throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.PRESTADOR);
-    }
-
-    private boolean validarId(String chave, Long id) {
-
-        Token token = servicoAutenticacao.getTokenByChave(chave);
-        if (token.getUsuarioId().equals(id)) return true;
-        else throw new PermissaoException();
-    }
-
-
-    private boolean ehUsuarioLdap(Credenciais credenciais) {
-        // Mock da parte de login com uma lista
-        List<String[]> usuariosLdap = new ArrayList<String[]>();
-        usuariosLdap.add(new String[]{"Matteus", "passwd-admin"});
-        usuariosLdap.add(new String[]{"Alessandro", "passwd-almoxarife"});
-        usuariosLdap.add(new String[]{"Lucas", "passwd-almoxarife"});
-        usuariosLdap.add(new String[]{"Bernard", "passwd-prestador"});
-        usuariosLdap.add(new String[]{"Rafael", "passwd-prestador"});
-
-        boolean ehUsuarioValido = false;
-        for (String[] usuario : usuariosLdap) {
-            if (usuario[0].equals(credenciais.getLogin()) && usuario[1].equals(credenciais.getSenha())) {
-                ehUsuarioValido = true;
-                break;
-            }
-        }
-        return ehUsuarioValido;
-    }
+    return ehUsuarioValido;
+  }
 }

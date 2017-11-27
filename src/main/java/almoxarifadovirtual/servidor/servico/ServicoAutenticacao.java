@@ -9,35 +9,35 @@ import org.springframework.stereotype.Service;
 @Service
 public class ServicoAutenticacao {
 
-    @Autowired
-    RepositorioToken repository;
+  @Autowired
+  RepositorioToken repository;
 
-    public void deletarToken(Token token) {
-        repository.delete(token);
+  public void deletarToken(Token token) {
+    repository.delete(token);
+  }
+
+  public Token getTokenByChave(String chave) {
+    return repository.findByChave(chave);
+  }
+
+  public Token getTokenByUsuarioId(Long usuarioId) {
+    return repository.findByUsuarioId(usuarioId);
+  }
+
+  public Token gerarToken(Long usuarioId) {
+    return repository.save(new Token(usuarioId));
+  }
+
+  public boolean validarToken(String chave) {
+    Token token = getTokenByChave(chave);
+
+    if (token == null) {
+      throw new TokenException();
+    } else if (token.validarToken()) {
+      return true;
+    } else {
+      deletarToken(token);
+      throw new TokenException(token.getExpirationDate());
     }
-
-    public Token getTokenByChave(String chave) {
-        return repository.findByChave(chave);
-    }
-
-    public Token getTokenByUsuarioId(Long usuarioId){return repository.findByUsuarioId(usuarioId);}
-
-    public Token gerarToken(Long usuarioId) {
-        return repository.save(new Token(usuarioId));
-    }
-
-    public boolean validarToken(String chave) {
-        Token token = getTokenByChave(chave);
-
-        if (token == null)
-            throw new TokenException();
-
-        else if (token.validarToken())
-            return true;
-
-        else {
-            deletarToken(token);
-            throw new TokenException(token.getExpirationDate());
-        }
-    }
+  }
 }

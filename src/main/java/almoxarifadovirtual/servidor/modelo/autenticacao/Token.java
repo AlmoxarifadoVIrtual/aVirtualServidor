@@ -13,74 +13,75 @@ import javax.persistence.Table;
 @Table(name = "tb_token")
 public class Token {
 
-    private static final int UMA_HORA = 1;
+  private static final int UMA_HORA = 1;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    @Column
-    private String chave;
+  @Column
+  private String chave;
 
-    @Column
-    private String expirationDate;
+  @Column
+  private String expirationDate;
 
-    @Column(unique = true)
-    private Long usuarioId;
+  @Column(unique = true)
+  private Long usuarioId;
 
-    /**
-     * Construtor do objeto Token que é utilizado para validar uma seção de usuário após o login.
-     * @param usuarioId - Id do usuário que solicitou a conexão ao sistema.
-     */
-    public Token(Long usuarioId) {
-        setExpirationDate(LocalDateTime.now().plusHours(UMA_HORA));
-        setChave(UUID.randomUUID().toString());
-        setUsuarioId(usuarioId);
-    }
+  /**
+   * Construtor do objeto Token que é utilizado para validar uma seção de usuário após o login.
+   *
+   * @param usuarioId - Id do usuário que solicitou a conexão ao sistema.
+   */
+  public Token(Long usuarioId) {
+    setExpirationDate(LocalDateTime.now().plusHours(UMA_HORA));
+    setChave(UUID.randomUUID().toString());
+    setUsuarioId(usuarioId);
+  }
 
-    public Token() {
-    }
+  public Token() {
+  }
 
-    public String getChave() {
-        return chave;
-    }
+  public String getChave() {
+    return chave;
+  }
 
-    public String getExpirationDate() {
-        return expirationDate;
-    }
+  public String getExpirationDate() {
+    return expirationDate;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setChave(String chave) {
-        this.chave = chave;
-    }
+  public void setChave(String chave) {
+    this.chave = chave;
+  }
 
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate.toString();
-    }
+  public void setExpirationDate(LocalDateTime expirationDate) {
+    this.expirationDate = expirationDate.toString();
+  }
 
-    public Long getUsuarioId() {
-        return usuarioId;
-    }
+  public Long getUsuarioId() {
+    return usuarioId;
+  }
 
-    public void setUsuarioId(Long usuarioId) {
-        this.usuarioId = usuarioId;
-    }
+  public void setUsuarioId(Long usuarioId) {
+    this.usuarioId = usuarioId;
+  }
 
-    /**
-    * Método que realiza a validação do token considerando sua data de validade.
-    * @return True caso a dava de validade seja menor que a data local atual,
-    * e False caso contrário.
-    */
-    public boolean validarToken() {
+  /**
+   * Método que realiza a validação do token considerando sua data de validade.
+   *
+   * @return True caso a dava de validade seja menor que a data local atual, e False caso contrário.
+   */
+  public boolean validarToken() {
 
-        String now = LocalDateTime.now().toString();
-        return this.expirationDate.compareTo(now) < 0;
-    }
+    String now = LocalDateTime.now().toString();
+    return this.expirationDate.compareTo(now) < 0;
+  }
 }
