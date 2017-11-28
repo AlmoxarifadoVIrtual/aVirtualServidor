@@ -6,7 +6,6 @@ import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.util.LoginException;
 import almoxarifadovirtual.servidor.util.PermissaoException;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,9 @@ public class ServicoControle {
   @Autowired
   private ServicoAutenticacao servicoAutenticacao;
 
+  @Autowired
+  private ServicoLdap servicoLdap;
+
   /**
    * Método que valida o login e gera uma chave com duração de 01 hora para o usuário utilizar o
    * sistema.
@@ -30,7 +32,7 @@ public class ServicoControle {
    *         sistema.
    */
   public String logIn(Credenciais credenciais) {
-    if (!ehUsuarioLdap(credenciais)) {
+    if (!servicoLdap.ehUsuarioLdap(credenciais)) {
       throw new LoginException();
     }
 
@@ -177,26 +179,6 @@ public class ServicoControle {
     } else {
       throw new PermissaoException();
     }
-  }
-
-
-  private boolean ehUsuarioLdap(Credenciais credenciais) {
-    // Mock da parte de login com uma lista
-    List<String[]> usuariosLdap = new ArrayList<String[]>();
-    usuariosLdap.add(new String[]{"Matteus", "passwd-admin"});
-    usuariosLdap.add(new String[]{"Alessandro", "passwd-almoxarife"});
-    usuariosLdap.add(new String[]{"Lucas", "passwd-almoxarife"});
-    usuariosLdap.add(new String[]{"Bernard", "passwd-prestador"});
-    usuariosLdap.add(new String[]{"Rafael", "passwd-prestador"});
-
-    boolean ehUsuarioValido = false;
-    for (String[] usuario : usuariosLdap) {
-      if (usuario[0].equals(credenciais.getLogin()) && usuario[1].equals(credenciais.getSenha())) {
-        ehUsuarioValido = true;
-        break;
-      }
-    }
-    return ehUsuarioValido;
   }
 
   public void logout(String chave) {
