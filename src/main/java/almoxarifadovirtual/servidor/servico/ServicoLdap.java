@@ -1,10 +1,10 @@
 package almoxarifadovirtual.servidor.servico;
 
 import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.stereotype.Service;
+
 
 @Service
 public class ServicoLdap {
