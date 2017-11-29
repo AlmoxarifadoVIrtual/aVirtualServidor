@@ -22,7 +22,7 @@ public class ControleDeAutenticacao {
   ServicoUsuario servicoUsuario;
 
   protected void validarAcessoLdap(String login, String senha) {
-    if (!servicoLdap.ehUsuarioLdap(login, senha)) {
+    if (!servicoLdap.validarUsuarioLdap(login, senha)) {
       throw new UsuarioException();
     }
   }

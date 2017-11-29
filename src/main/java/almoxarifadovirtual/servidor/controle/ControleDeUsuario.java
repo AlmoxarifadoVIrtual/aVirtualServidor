@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuarios")
-public class ControleDeUsuarios {
+public class ControleDeUsuario {
 
   @Autowired
   private ServicoUsuario servicoUsuario;
@@ -46,8 +46,7 @@ public class ControleDeUsuarios {
    *
    * @param id - Valor da id do usuário do tipo Long.
    * @param chave - String utilizada para validar a autorização do requerente em executar a ação.
-   * @return Se o usuário existir, e a chave tiver autorização para a operação, o usuário relativo
-   *         ao id é retornado, caso contrário o retorno é null.
+   * @return O usuário correspondente a id contida na url.
    */
   @GetMapping("/{id}")
   @ResponseBody
@@ -97,8 +96,7 @@ public class ControleDeUsuarios {
    * Método que recupera todos os usuários do sistema.
    *
    * @param chave - Identificação do usuário que está solicitando a informação
-   * @return Um lista com todos os usuários cadastrados no sistema, se o solicitante for um
-   *         administrador do sistema e a chave passada no parâmetro for válida.
+   * @return Um lista com todos os usuários cadastrados no sistema.
    */
   @GetMapping("/listar")
   @ResponseBody
@@ -117,7 +115,8 @@ public class ControleDeUsuarios {
    */
   @GetMapping("/listar/{funcaoUsuario}")
   @ResponseBody
-  private List<Usuario> getUsuarioByFuncao(@PathVariable("funcaoUsuario") String funcaoUsuario, @RequestHeader String chave) {
+  private List<Usuario> getUsuarioByFuncao(@PathVariable("funcaoUsuario") String funcaoUsuario,
+      @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
 

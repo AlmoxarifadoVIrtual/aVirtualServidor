@@ -10,6 +10,9 @@ public class ServicoLdap {
 
   private List<String[]> usuariosLdap;
 
+  /**
+   * Classe que faz um mock de um servidor Ldap.
+   */
   public ServicoLdap() {
     this.usuariosLdap = new ArrayList<String[]>();
     this.usuariosLdap.add(new String[] {"Matteus", "passwd-admin"});
@@ -19,7 +22,13 @@ public class ServicoLdap {
     this.usuariosLdap.add(new String[] {"Rafael", "passwd-prestador"});
   }
 
-  public boolean ehUsuarioLdap(String login, String senha) {
+  /**
+   * Método que verifica se usuário está cadastrado no servidor Ldap.
+   * @param login - Login correspondente ao usuário que está sendo validado.
+   * @param senha - Senha do usuário que está sendo validado.
+   * @return True se existir um usuário com o mesmo login e senha.
+   */
+  public boolean validarUsuarioLdap(String login, String senha) {
     for (String[] usuario : usuariosLdap) {
       if (usuario[0].equals(login) && usuario[1].equals(senha)) {
         return true;

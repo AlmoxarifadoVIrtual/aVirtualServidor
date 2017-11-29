@@ -68,6 +68,11 @@ public class ServicoUsuario {
     return false;
   }
 
+  /**
+   * Método usado para validar se o usuário é um administrador.
+   * @param id - Identificação do usuário.
+   * @return True caso o usuário seja administrador.
+   */
   public boolean validarAdmin(Long id) {
     Usuario usuario = getUsuarioPelaId(id);
     if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) {
@@ -77,16 +82,11 @@ public class ServicoUsuario {
     }
   }
 
-  public boolean validarPrestador(Long id) {
-    Usuario usuario = getUsuarioPelaId(id);
-
-    if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
+  /**
+   * Método usado para validar se o usuário é um almoxarife.
+   * @param id - Identificação do usuário.
+   * @return True caso o usuário seja almoxarife.
+   */
   public boolean validarAlmoxarife(Long id) {
     Usuario usuario = getUsuarioPelaId(id);
     if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) {
@@ -96,4 +96,18 @@ public class ServicoUsuario {
     }
   }
 
+  /**
+   * Método usado para validar se o usuário é um prestador.
+   * @param id - Identificação do usuário.
+   * @return True caso o usuário seja prestador.
+   */
+  public boolean validarPrestador(Long id) {
+    Usuario usuario = getUsuarioPelaId(id);
+
+    if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
