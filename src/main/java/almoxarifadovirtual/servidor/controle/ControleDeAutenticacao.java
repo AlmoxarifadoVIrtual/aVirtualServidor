@@ -57,9 +57,11 @@ public class ControleDeAutenticacao {
     }
   }
 
-  protected void validarUsuarioId(String chave, Long id) {
+  protected void validarUsuarioOuAdmin(String chave, Long id) {
 
-    if (!servicoToken.validarUsuarioId(chave, id)) {
+    Token token = servicoToken.validarToken(chave);
+    if (!servicoUsuario.validarAdmin(token.getUsuarioId())
+        || !servicoToken.validarUsuarioId(chave, id)) {
       throw new PermissaoException();
     }
   }

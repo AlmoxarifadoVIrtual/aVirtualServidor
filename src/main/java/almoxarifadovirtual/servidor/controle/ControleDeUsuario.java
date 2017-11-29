@@ -52,9 +52,7 @@ public class ControleDeUsuario {
   @ResponseBody
   public Usuario getUsuarioPelaId(@PathVariable("id") Long id, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAdmin(chave);
-    controleDeAutenticacao.validarUsuarioId(chave, id);
-
+    controleDeAutenticacao.validarUsuarioOuAdmin(chave, id);
     return servicoUsuario.getUsuarioPelaId(id);
   }
 
@@ -86,8 +84,7 @@ public class ControleDeUsuario {
   @ResponseBody
   public boolean removerUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAdmin(chave);
-    controleDeAutenticacao.validarUsuarioId(chave, id);
+    controleDeAutenticacao.validarUsuarioOuAdmin(chave, id);
 
     return servicoUsuario.delete(id);
   }
