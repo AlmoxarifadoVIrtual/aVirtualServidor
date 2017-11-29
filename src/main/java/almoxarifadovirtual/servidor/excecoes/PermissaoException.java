@@ -1,4 +1,4 @@
-package almoxarifadovirtual.servidor.util;
+package almoxarifadovirtual.servidor.excecoes;
 
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 

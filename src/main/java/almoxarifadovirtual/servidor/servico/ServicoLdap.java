@@ -1,7 +1,6 @@
 package almoxarifadovirtual.servidor.servico;
 
-import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
-import almoxarifadovirtual.servidor.util.UsuarioException;
+import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -21,9 +20,9 @@ public class ServicoLdap {
     this.usuariosLdap.add(new String[] {"Rafael", "passwd-prestador"});
   }
 
-  public boolean ehUsuarioLdap(Credenciais credenciais) {
+  public boolean ehUsuarioLdap(String login, String senha) {
     for (String[] usuario : usuariosLdap) {
-      if (usuario[0].equals(credenciais.getLogin()) && usuario[1].equals(credenciais.getSenha())) {
+      if (usuario[0].equals(login) && usuario[1].equals(senha)) {
         return true;
       }
     }

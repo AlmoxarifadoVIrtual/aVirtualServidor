@@ -3,6 +3,7 @@ package almoxarifadovirtual.servidor.servico;
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.repositorio.RepositorioUsuario;
+import almoxarifadovirtual.servidor.excecoes.PermissaoException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,34 @@ public class ServicoUsuario {
       return true;
     }
     return false;
+  }
+
+  public boolean validarAdmin(Long id) {
+    Usuario usuario = get(id);
+    if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ADMINISTRADOR);
+    }
+  }
+
+  public boolean validarPrestador(Long id) {
+    Usuario usuario = get(id);
+
+    if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.PRESTADOR);
+    }
+  }
+
+  public boolean validarAlmoxarife(Long id) {
+    Usuario usuario = get(id);
+    if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) {
+      return true;
+    } else {
+      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ALMOXARIFE);
+    }
   }
 
 }

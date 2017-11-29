@@ -1,4 +1,4 @@
-package almoxarifadovirtual.servidor.util;
+package almoxarifadovirtual.servidor.excecoes;
 
 public class UsuarioException extends RuntimeException {
   public UsuarioException() {
