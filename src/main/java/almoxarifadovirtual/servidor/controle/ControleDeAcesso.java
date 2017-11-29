@@ -1,11 +1,11 @@
 package almoxarifadovirtual.servidor.controle;
 
+import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.servico.ServicoToken;
 import almoxarifadovirtual.servidor.servico.ServicoUsuario;
-import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +35,7 @@ public class ControleDeAcesso {
    * @param credenciais - Objeto que contém o login e a senha do usuário.
    * @return Uma chave do tipo String que será utilizada para validação do acesso do usuário ao
    *         sistema.
-   * @throws UsuarioException Caso as credencias não estejam cadastradas no serviço LDAP.
+   * @throws UsuarioException Caso as credencias não correspondam a um usuário válido.
    */
   @PostMapping
   @ResponseBody
@@ -43,7 +43,7 @@ public class ControleDeAcesso {
 
     controleDeAutenticacao.validarAcessoLdap(credenciais.getLogin(), credenciais.getSenha());
 
-    Usuario usuario = servicoUsuario.get(credenciais.getLogin());
+    Usuario usuario = servicoUsuario.getUsuarioPeloNome(credenciais.getLogin());
     validarUsuario(usuario);
 
     Token token = servicoToken.getTokenByUsuarioId(usuario.getId());

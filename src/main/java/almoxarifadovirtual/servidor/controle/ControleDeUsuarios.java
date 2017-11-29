@@ -1,9 +1,7 @@
 package almoxarifadovirtual.servidor.controle;
 
-import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.servico.ServicoUsuario;
-import almoxarifadovirtual.servidor.excecoes.PermissaoException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/usuarios")
-
 public class ControleDeUsuarios {
 
   @Autowired
@@ -35,16 +32,13 @@ public class ControleDeUsuarios {
    * @param usuario - Objeto contendo os dados do usuário a ser criado.
    * @param chave - String utilizada para validar a autorização do requerente em executar a ação.
    * @return Um objeto do tipo Usuario conforme armazenado pelo sistema.
-   * @throws PermissaoException Caso a chave não seja validada pelo sistema, ou não corresponda a um
-   *         usuário com poderes de administrador.
    */
   @PostMapping
   @ResponseBody
   public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
-    if (controleDeAutenticacao.validarAdmin(chave)) {
-      return servicoUsuario.create(usuario);
-    }
-    return null;
+
+    controleDeAutenticacao.validarAdmin(chave);
+    return servicoUsuario.create(usuario);
   }
 
   /**
@@ -54,16 +48,49 @@ public class ControleDeUsuarios {
    * @param chave - String utilizada para validar a autorização do requerente em executar a ação.
    * @return Se o usuário existir, e a chave tiver autorização para a operação, o usuário relativo
    *         ao id é retornado, caso contrário o retorno é null.
-   * @throws PermissaoException Caso a chave não esteja cadastrada no sistema e, não pertença a um
-   *         administrador ou ao usuário cuja id passada no parâmetro.
    */
   @GetMapping("/{id}")
   @ResponseBody
-  public Usuario getUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
-    if (controleDeAutenticacao.validarAdmin(chave) || controleDeAutenticacao.validarId(chave, id)) {
-      return servicoUsuario.get(id);
-    }
-    return null;
+  public Usuario getUsuarioPelaId(@PathVariable("id") Long id, @RequestHeader String chave) {
+
+    controleDeAutenticacao.validarAdmin(chave);
+    controleDeAutenticacao.validarUsuarioId(chave, id);
+
+    return servicoUsuario.getUsuarioPelaId(id);
+  }
+
+  /**
+   * Método que atualiza as informações do usuário.
+   *
+   * @param usuario - Objeto com as informações atualizadas.
+   * @param chave - Código de acesso do usuário que está solicitando a operação.
+   * @return True caso as informações sejam atualizadas com sucesso.
+   */
+  @PutMapping("/{id}")
+  @ResponseBody
+  public boolean atualizarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
+
+    controleDeAutenticacao.validarAdmin(chave);
+    controleDeAutenticacao.validarUsuarioLdap(usuario.getNome());
+
+    return servicoUsuario.update(usuario);
+  }
+
+  /**
+   * Método que remove um usuário do sistema.
+   *
+   * @param id - Código de identificação do usuário a ser removido.
+   * @param chave - Código de acesso do usuário que está solicitando a operação.
+   * @return True caso a operação tenha sido realizada com sucesso.
+   */
+  @DeleteMapping("/{id}")
+  @ResponseBody
+  public boolean removerUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
+
+    controleDeAutenticacao.validarAdmin(chave);
+    controleDeAutenticacao.validarUsuarioId(chave, id);
+
+    return servicoUsuario.delete(id);
   }
 
   /**
@@ -73,68 +100,12 @@ public class ControleDeUsuarios {
    * @return Um lista com todos os usuários cadastrados no sistema, se o solicitante for um
    *         administrador do sistema e a chave passada no parâmetro for válida.
    */
-  @GetMapping
+  @GetMapping("/listar")
   @ResponseBody
   public List<Usuario> getAll(@RequestHeader String chave) {
-    if (controleDeAutenticacao.validarAdmin(chave)) {
-      return servicoUsuario.getAll();
-    }
 
-    return null;
-  }
-
-  /**
-   * Método que atualiza as informações do usuário.
-   *
-   * @param usuario - Objeto com as informações atualizadas.
-   * @param chave - Código de acesso do usuário que está solicitando a operação.
-   * @return True caso as informações sejam atualizadas com sucesso.
-   * @throws PermissaoException Caso a chave não esteja cadastrada no sistema e, não pertença a um
-   *         administrador ou ao usuário cuja id passada no parâmetro.
-   */
-  @PutMapping("/{id}")
-  @ResponseBody
-  public boolean atualizarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
-
-    return controleDeAutenticacao.validarAdmin(chave)
-           && controleDeAutenticacao.validarUsuarioLdap(usuario.getNome())
-           && servicoUsuario.update(usuario);
-  }
-
-  /**
-   * Método que remove um usuário do sistema.
-   *
-   * @param id - Código de identificação do usuário a ser removido.
-   * @param chave - Código de acesso do usuário que está solicitando a operação.
-   * @return True caso a operação tenha sido realizada com sucesso.
-   * @throws PermissaoException Caso a chave não esteja cadastrada no sistema e, não pertença a um
-   *         administrador ou ao usuário cuja id passada no parâmetro.
-   */
-  @DeleteMapping("/{id}")
-  @ResponseBody
-  public boolean removerUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
-
-    return (controleDeAutenticacao.validarAdmin(chave)
-           || controleDeAutenticacao.validarId(chave, id)) && servicoUsuario.delete(id);
-
-  }
-
-  @GetMapping("/administradores")
-  @ResponseBody
-  public List<Usuario> listarAdministradores(@RequestHeader String token) {
-    return getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
-  }
-
-  @GetMapping("/almoxarifes")
-  @ResponseBody
-  public List<Usuario> listarAlmoxarifes(@RequestHeader String token) {
-    return getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
-  }
-
-  @GetMapping("/prestadores")
-  @ResponseBody
-  public List<Usuario> listarPrestadores(@RequestHeader String token) {
-    return getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
+    controleDeAutenticacao.validarAdmin(chave);
+    return servicoUsuario.getAll();
   }
 
   /**
@@ -143,15 +114,13 @@ public class ControleDeUsuarios {
    * @param funcaoUsuario - Função que será usada para filtrar os usurários.
    * @param chave - Código de acesso do solicitante.
    * @return Uma lista com todos os usuários que pertençam a mesma função.
-   * @throws PermissaoException Caso a chave não esteja cadastrada no sistema, ou não corresponda a
-   *         um administrador.
    */
-  private List<Usuario> getUsuarioByFuncao(FuncaoUsuario funcaoUsuario, String chave) {
+  @GetMapping("/listar/{funcaoUsuario}")
+  @ResponseBody
+  private List<Usuario> getUsuarioByFuncao(@PathVariable("funcaoUsuario") String funcaoUsuario, @RequestHeader String chave) {
 
-    if (controleDeAutenticacao.validarAdmin(chave)) {
-      return servicoUsuario.get(funcaoUsuario);
-    }
+    controleDeAutenticacao.validarAdmin(chave);
 
-    return null;
+    return servicoUsuario.getUsuariosPelaFuncao(funcaoUsuario);
   }
 }

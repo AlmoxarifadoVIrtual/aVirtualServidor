@@ -3,7 +3,6 @@ package almoxarifadovirtual.servidor.servico;
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.repositorio.RepositorioUsuario;
-import almoxarifadovirtual.servidor.excecoes.PermissaoException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,16 +22,16 @@ public class ServicoUsuario {
     return repositorio.save(usuario);
   }
 
-  public Usuario get(Long id) {
+  public Usuario getUsuarioPelaId(Long id) {
     return repositorio.findOne(id);
   }
 
-  public Usuario get(String nome) {
+  public Usuario getUsuarioPeloNome(String nome) {
     return repositorio.findByNome(nome);
   }
 
-  public List<Usuario> get(FuncaoUsuario tipo) {
-    return repositorio.findByFuncao(tipo);
+  public List<Usuario> getUsuariosPelaFuncao(String funcao) {
+    return repositorio.findByFuncao(FuncaoUsuario.selecionarFuncao(funcao));
   }
 
 
@@ -42,6 +41,7 @@ public class ServicoUsuario {
 
   /**
    * Método que atualiza dos dados de um usuário.
+   *
    * @param usuario - Objeto do tipo Usuario com as informações atualizadas.
    * @return Um boolean True caso o usuário exista, e false caso contrário.
    */
@@ -56,6 +56,7 @@ public class ServicoUsuario {
 
   /**
    * Método que remove um usuário do sistema.
+   *
    * @param id - Valor que identifica o usuário do tipo Long.
    * @return True se o usuário existir, ou False caso contrário.
    */
@@ -68,30 +69,30 @@ public class ServicoUsuario {
   }
 
   public boolean validarAdmin(Long id) {
-    Usuario usuario = get(id);
+    Usuario usuario = getUsuarioPelaId(id);
     if (usuario.getFuncao() == FuncaoUsuario.ADMINISTRADOR) {
       return true;
     } else {
-      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ADMINISTRADOR);
+      return false;
     }
   }
 
   public boolean validarPrestador(Long id) {
-    Usuario usuario = get(id);
+    Usuario usuario = getUsuarioPelaId(id);
 
     if (usuario.getFuncao() == FuncaoUsuario.PRESTADOR) {
       return true;
     } else {
-      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.PRESTADOR);
+      return false;
     }
   }
 
   public boolean validarAlmoxarife(Long id) {
-    Usuario usuario = get(id);
+    Usuario usuario = getUsuarioPelaId(id);
     if (usuario.getFuncao() == FuncaoUsuario.ALMOXARIFE) {
       return true;
     } else {
-      throw new PermissaoException(usuario.getFuncao(), FuncaoUsuario.ALMOXARIFE);
+      return false;
     }
   }
 

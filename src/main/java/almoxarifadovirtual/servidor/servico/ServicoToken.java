@@ -1,9 +1,9 @@
 package almoxarifadovirtual.servidor.servico;
 
-import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
-import almoxarifadovirtual.servidor.repositorio.RepositorioToken;
 import almoxarifadovirtual.servidor.excecoes.PermissaoException;
 import almoxarifadovirtual.servidor.excecoes.TokenException;
+import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
+import almoxarifadovirtual.servidor.repositorio.RepositorioToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

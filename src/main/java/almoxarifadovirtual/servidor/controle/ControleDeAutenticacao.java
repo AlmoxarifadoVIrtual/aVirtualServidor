@@ -1,5 +1,7 @@
 package almoxarifadovirtual.servidor.controle;
 
+import almoxarifadovirtual.servidor.excecoes.PermissaoException;
+import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
 import almoxarifadovirtual.servidor.servico.ServicoLdap;
 import almoxarifadovirtual.servidor.servico.ServicoToken;
@@ -19,37 +21,46 @@ public class ControleDeAutenticacao {
   @Autowired
   ServicoUsuario servicoUsuario;
 
-  public boolean validarAcessoLdap(String nome, String senha) {
-    return servicoLdap.ehUsuarioLdap(nome, senha);
+  protected void validarAcessoLdap(String login, String senha) {
+    if (!servicoLdap.ehUsuarioLdap(login, senha)) {
+      throw new UsuarioException();
+    }
   }
 
-  public boolean validarUsuarioLdap(String nome) {
-    return servicoLdap.existeUsuario(nome);
+  protected void validarUsuarioLdap(String login) {
+    if (servicoLdap.existeUsuario(login)) {
+      throw new UsuarioException();
+    }
   }
 
-
-
-  public boolean validarAdmin(String chave) {
+  protected void validarAdmin(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    return servicoUsuario.validarAdmin(token.getUsuarioId());
+    if (!servicoUsuario.validarAdmin(token.getUsuarioId())) {
+      throw new PermissaoException();
+    }
   }
 
-  public boolean validarAlmoxarife(String chave) {
+  protected void validarAlmoxarife(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    return servicoUsuario.validarAlmoxarife(token.getUsuarioId());
-
+    if (!servicoUsuario.validarAlmoxarife(token.getUsuarioId())) {
+      throw new PermissaoException();
+    }
   }
 
-  public boolean validarPrestador(String chave) {
+  protected void validarPrestador(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    return servicoUsuario.validarPrestador(token.getUsuarioId());
+    if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
+      throw new PermissaoException();
+    }
   }
 
-  public boolean validarId(String chave, Long id) {
+  protected void validarUsuarioId(String chave, Long id) {
 
-    return servicoToken.validarUsuarioId(chave, id);
+    if (!servicoToken.validarUsuarioId(chave, id)) {
+      throw new PermissaoException();
+    }
   }
 }

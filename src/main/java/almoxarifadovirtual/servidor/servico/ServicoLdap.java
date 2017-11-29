@@ -1,6 +1,5 @@
 package almoxarifadovirtual.servidor.servico;
 
-import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -26,22 +25,22 @@ public class ServicoLdap {
         return true;
       }
     }
-    throw new UsuarioException();
-
+    return false;
   }
 
   /**
    * Método que verifica se o nome do usuário está cadastrado no LDAP.
    * @param nome - Nome a ser verificado.
    * @return True se o nome do usuário está cadastrado no sistema.
-   * @throws UsuarioException caso o usuário não exista no sistema.
    */
   public boolean existeUsuario(String nome) {
+
     for (String[] usuario : usuariosLdap) {
       if (usuario[0].equals(nome)) {
         return true;
       }
     }
-    throw new UsuarioException();
+
+    return false;
   }
 }
