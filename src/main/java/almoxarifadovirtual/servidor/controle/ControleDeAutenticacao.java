@@ -61,7 +61,7 @@ public class ControleDeAutenticacao {
 
     Token token = servicoToken.validarToken(chave);
     if (!servicoUsuario.validarAdmin(token.getUsuarioId())
-        || !servicoToken.validarUsuarioId(chave, id)) {
+        && !servicoToken.validarUsuarioId(chave, id)) {
       throw new PermissaoException();
     }
   }
