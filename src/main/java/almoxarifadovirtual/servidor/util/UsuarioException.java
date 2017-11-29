@@ -1,8 +1,7 @@
 package almoxarifadovirtual.servidor.util;
 
-public class LoginException extends RuntimeException {
-
-  public LoginException() {
+public class UsuarioException extends RuntimeException {
+  public UsuarioException() {
     super("Usuário não cadastrado no sistema!");
   }
 }

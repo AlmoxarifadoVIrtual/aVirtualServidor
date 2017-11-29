@@ -1,5 +1,6 @@
 package almoxarifadovirtual.servidor.modelo.autenticacao;
 
+import almoxarifadovirtual.servidor.modelo.util.Constantes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -8,24 +9,30 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.validation.annotation.Validated;
 
 @Entity(name = "Token")
 @Table(name = "tb_token")
+@Validated
 public class Token {
 
   private static final int UMA_HORA = 1;
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(unique = true, nullable = false)
   private Long id;
 
-  @Column
+  @Column(nullable = false)
   private String chave;
 
-  @Column
+  @Column(nullable = false)
   private String expirationDate;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private Long usuarioId;
 
   /**
@@ -35,6 +42,8 @@ public class Token {
    */
   public Token(Long usuarioId) {
     setExpirationDate(LocalDateTime.now().plusHours(UMA_HORA));
+    System.out.println(getExpirationDate());
+    System.out.println(LocalDateTime.now().toString());
     setChave(UUID.randomUUID().toString());
     setUsuarioId(usuarioId);
   }
@@ -82,6 +91,6 @@ public class Token {
   public boolean validarToken() {
 
     String now = LocalDateTime.now().toString();
-    return this.expirationDate.compareTo(now) < 0;
+    return this.expirationDate.compareTo(now) >= 0;
   }
 }

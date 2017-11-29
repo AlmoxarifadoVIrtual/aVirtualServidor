@@ -1,11 +1,14 @@
 package almoxarifadovirtual.servidor.modelo.usuario;
 
+import almoxarifadovirtual.servidor.modelo.util.Constantes;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -15,10 +18,11 @@ public class Usuario {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(unique = true, nullable = false)
   private Long id;
 
-  @Column
-  @NotEmpty(message = "O nome não pode ser vazio")
+  @Column(nullable = false)
+  @NotEmpty(message = "O nome do usuário não pode ser vazio.")
   private String nome;
 
   @Column(nullable = false)

@@ -19,7 +19,6 @@ public class ServicoUsuario {
   }
 
   public Usuario create(Usuario usuario) {
-    System.out.println(usuario + "estah sendo criado");
     return repositorio.save(usuario);
   }
 

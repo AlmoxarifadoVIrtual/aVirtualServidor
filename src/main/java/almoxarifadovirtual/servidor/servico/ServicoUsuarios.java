@@ -4,15 +4,15 @@ import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
-import almoxarifadovirtual.servidor.util.LoginException;
 import almoxarifadovirtual.servidor.util.PermissaoException;
+import almoxarifadovirtual.servidor.util.UsuarioException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
-public class ServicoControle {
+public class ServicoUsuarios {
 
   @Autowired
   private ServicoUsuario servicoUsuario;
@@ -30,22 +30,38 @@ public class ServicoControle {
    * @param credenciais - Objeto que contém o login e a senha do usuário.
    * @return Uma chave do tipo String que será utilizada para validação do acesso do usuário ao
    *         sistema.
-   * @throws LoginException Caso as credencias não estejam cadastradas no serviço LDAP.
+   * @throws UsuarioException Caso as credencias não estejam cadastradas no serviço LDAP.
    */
   public String logIn(Credenciais credenciais) {
-    if (!servicoLdap.ehUsuarioLdap(credenciais)) {
-      throw new LoginException();
-    }
+
+    validarLdap(credenciais);
 
     Usuario usuario = servicoUsuario.get(credenciais.getLogin());
+    validarUsuario(usuario);
 
-    if (usuario != null) {
-      Token token = servicoAutenticacao.gerarToken(usuario.getId());
-      return token.getChave();
-    } else {
-      throw new LoginException();
+    Token token = servicoAutenticacao.getTokenByUsuarioId(usuario.getId());
+
+    if (token == null) {
+      token = servicoAutenticacao.gerarToken(usuario.getId());
+
+    } else if (!token.validarToken()) {
+      servicoAutenticacao.deletarToken(token);
+      token = servicoAutenticacao.gerarToken(usuario.getId());
     }
 
+    return token.getChave();
+  }
+
+  private void validarLdap(Credenciais credenciais) {
+    if (!servicoLdap.ehUsuarioLdap(credenciais)) {
+      throw new UsuarioException();
+    }
+  }
+
+  private void validarUsuario(Usuario usuario) {
+    if (usuario == null) {
+      throw new UsuarioException();
+    }
   }
 
   /**
@@ -72,7 +88,7 @@ public class ServicoControle {
    *         usuário com poderes de administrador.
    */
   public Usuario criarUsuario(Usuario usuario, String chave) {
-    if (validarToken(chave) && validarAdmin(chave)) {
+    if (servicoAutenticacao.validarToken(chave) && validarAdmin(chave)) {
       return servicoUsuario.create(usuario);
     }
     return null;
@@ -90,10 +106,9 @@ public class ServicoControle {
    */
   public Usuario getUsuario(Long id, String chave) {
 
-    if (validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
+    if (servicoAutenticacao.validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))) {
       return servicoUsuario.get(id);
     }
-
     return null;
   }
 
@@ -101,12 +116,12 @@ public class ServicoControle {
    * Método que recupera todos os usuários do sistema.
    *
    * @param chave - Identificação do usuário que está solicitando a informação
-   * @return - Um lista com todos os usuários cadastrados no sistema, se o solicitante for um
-   *           administrador do sistema e a chave passada no parâmetro for válida.
+   * @return Um lista com todos os usuários cadastrados no sistema, se o solicitante for um
+   *         administrador do sistema e a chave passada no parâmetro for válida.
    */
   public List<Usuario> getAllUsuarios(String chave) {
 
-    if (validarToken(chave) && validarAdmin(chave)) {
+    if (servicoAutenticacao.validarToken(chave) && validarAdmin(chave)) {
       return servicoUsuario.getAll();
     }
 
@@ -115,6 +130,7 @@ public class ServicoControle {
 
   /**
    * Método que atualiza as informações do usuário.
+   *
    * @param usuario - Objeto com as informações atualizadas.
    * @param chave - Código de acesso do usuário que está solicitando a operação.
    * @return True caso as informações sejam atualizadas com sucesso.
@@ -123,12 +139,14 @@ public class ServicoControle {
    */
   public boolean atualizarUsuario(Usuario usuario, String chave) {
 
-    return validarToken(chave) && validarAdmin(chave) && servicoUsuario.update(usuario);
+    return servicoAutenticacao.validarToken(chave) && validarAdmin(chave)
+           && servicoLdap.existeUsuario(usuario.getNome()) && servicoUsuario.update(usuario);
 
   }
 
   /**
    * Método que remove um usuário do sistema.
+   *
    * @param id - Código de identificação do usuário a ser removido.
    * @param chave - Código de acesso do usuário que está solicitando a operação.
    * @return True caso a operação tenha sido realizada com sucesso.
@@ -137,7 +155,8 @@ public class ServicoControle {
    */
   public boolean deletarUsuario(Long id, String chave) {
 
-    return validarToken(chave) && (validarAdmin(chave) || validarId(chave, id)) && servicoUsuario
+    return servicoAutenticacao.validarToken(chave) && (validarAdmin(chave) || validarId(chave, id))
+        && servicoUsuario
         .delete(id);
 
   }
@@ -153,33 +172,11 @@ public class ServicoControle {
    */
   public List<Usuario> getUsuarioByFuncao(FuncaoUsuario funcaoUsuario, String chave) {
 
-    if (validarToken(chave) && validarAdmin(chave)) {
+    if (servicoAutenticacao.validarToken(chave) && validarAdmin(chave)) {
       return servicoUsuario.get(funcaoUsuario);
     }
 
     return null;
-  }
-
-  //Métodos de autenticação
-
-  public void deletarToken(Token token) {
-    servicoAutenticacao.deletarToken(token);
-  }
-
-  public Token getTokenByChave(String chave) {
-    return servicoAutenticacao.getTokenByChave(chave);
-  }
-
-  public Token getTokenByUsuarioId(Long usuarioId) {
-    return servicoAutenticacao.getTokenByUsuarioId(usuarioId);
-  }
-
-  public Token gerarToken(Long usuarioId) {
-    return servicoAutenticacao.gerarToken(usuarioId);
-  }
-
-  private boolean validarToken(String chave) {
-    return this.servicoAutenticacao.validarToken(chave);
   }
 
   // Métodos auxiliares de validação

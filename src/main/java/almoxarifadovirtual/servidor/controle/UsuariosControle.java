@@ -3,82 +3,86 @@ package almoxarifadovirtual.servidor.controle;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
-import almoxarifadovirtual.servidor.servico.ServicoControle;
+import almoxarifadovirtual.servidor.servico.ServicoUsuarios;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class AvirtualFachada {
+@RequestMapping("/usuarios")
+public class UsuariosControle {
 
   @Autowired
-  private ServicoControle servicoControle;
+  private ServicoUsuarios servicoUsuarios;
 
-  @RequestMapping(value = "/login", method = RequestMethod.POST)
+  @PostMapping("/login")
   @ResponseBody
      public String login(@RequestBody Credenciais credenciais) {
-    return servicoControle.logIn(credenciais);
+    return servicoUsuarios.logIn(credenciais);
   }
 
-  @RequestMapping(value = "/logout", method = RequestMethod.DELETE)
+  @DeleteMapping("/logout")
   @ResponseBody
   public void logout(@PathVariable("chave") String chave) {
-    servicoControle.logout(chave);
+    servicoUsuarios.logout(chave);
   }
 
   //Métodos de Usuários
-  @RequestMapping(value = "/usuarios", method = RequestMethod.POST)
+  @PostMapping
   @ResponseBody
   public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String token) {
-    return servicoControle.criarUsuario(usuario, token);
+    return servicoUsuarios.criarUsuario(usuario, token);
   }
 
-  @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.GET)
+  @GetMapping("/{id}")
   @ResponseBody
   public Usuario getUsuario(@PathVariable("id") Long id, @RequestHeader String token) {
-    return servicoControle.getUsuario(id, token);
+    return servicoUsuarios.getUsuario(id, token);
   }
 
-  @RequestMapping(value = "/usuarios", method = RequestMethod.GET)
+  @GetMapping
   @ResponseBody
   public List<Usuario> getAll(@RequestHeader String token) {
-    return servicoControle.getAllUsuarios(token);
+    return servicoUsuarios.getAllUsuarios(token);
   }
 
-  @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.PUT)
+  @PutMapping("/{id}")
   @ResponseBody
   public boolean update(@RequestBody Usuario usuario, @RequestHeader String token) {
-    return servicoControle.atualizarUsuario(usuario, token);
+    return servicoUsuarios.atualizarUsuario(usuario, token);
   }
 
-  @RequestMapping(value = "/usuarios/{id}", method = RequestMethod.DELETE)
+  @DeleteMapping("/{id}")
   @ResponseBody
   public void delete(@PathVariable("id") Long id, @RequestHeader String token) {
-    servicoControle.deletarUsuario(id, token);
+    servicoUsuarios.deletarUsuario(id, token);
   }
 
-  @RequestMapping(value = "/usuarios/administradores", method = RequestMethod.GET)
+  @GetMapping("/administradores")
   @ResponseBody
   public List<Usuario> listarAdministradores(@RequestHeader String token) {
-    return servicoControle.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
+    return servicoUsuarios.getUsuarioByFuncao(FuncaoUsuario.ADMINISTRADOR, token);
   }
 
-  @RequestMapping(value = "/usuario/almoxarifes", method = RequestMethod.GET)
+  @GetMapping("/almoxarifes")
   @ResponseBody
   public List<Usuario> listarAlmoxarifes(@RequestHeader String token) {
-    return servicoControle.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
+    return servicoUsuarios.getUsuarioByFuncao(FuncaoUsuario.ALMOXARIFE, token);
   }
 
-  @RequestMapping(value = "/usuario/prestadores", method = RequestMethod.GET)
+  @GetMapping("/prestadores")
   @ResponseBody
   public List<Usuario> listarPrestadores(@RequestHeader String token) {
-    return servicoControle.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
+    return servicoUsuarios.getUsuarioByFuncao(FuncaoUsuario.PRESTADOR, token);
   }
 }
