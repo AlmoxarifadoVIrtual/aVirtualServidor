@@ -1,6 +1,5 @@
 package almoxarifadovirtual.servidor.modelo.autenticacao;
 
-import almoxarifadovirtual.servidor.modelo.util.Constantes;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.Column;
@@ -9,9 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.validation.annotation.Validated;
 
 @Entity(name = "Token")
