@@ -23,7 +23,6 @@ public class ControleDeProdutos {
     return null;
   }
 
-
   @DeleteMapping("/{id}")
   @ResponseBody
   public void retirarProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
@@ -35,7 +34,6 @@ public class ControleDeProdutos {
   public Produto getProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
     return null;
   }
-
 
   @GetMapping("/listar")
   @ResponseBody
