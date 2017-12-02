@@ -37,13 +37,11 @@ public class ServicoToken {
   public Token validarToken(String chave) {
     Token token = getTokenByChave(chave);
 
-    if (token == null) {
-      throw new TokenException();
-    } else if (token.validarToken()) {
+    if (token != null && token.validarToken()) {
       return token;
     } else {
       deletarToken(token);
-      throw new TokenException(token.getExpirationDate());
+      return null;
     }
   }
 
@@ -58,10 +56,10 @@ public class ServicoToken {
 
     Token token = validarToken(chave);
 
-    if (token.getUsuarioId().equals(id)) {
+    if (token != null && token.getUsuarioId().equals(id)) {
       return true;
     } else {
-      throw new PermissaoException();
+      return false;
     }
   }
 }

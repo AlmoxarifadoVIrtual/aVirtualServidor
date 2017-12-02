@@ -43,7 +43,7 @@ public class ControleDeProdutos {
 
   @GetMapping("/{tipoOperacao}")
   @ResponseBody
-  public List<Operacao> listarCadastros(@PathVariable("tipoOperacao") String tipoOperacao,
+  public List<Operacao> listarOperacoes(@PathVariable("tipoOperacao") String tipoOperacao,
       @RequestHeader String chave) {
     return null;
   }
