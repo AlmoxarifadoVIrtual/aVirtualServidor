@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepositorioUsuario extends JpaRepository<Usuario, Long> {
+public interface RepositorioDeUsuario extends JpaRepository<Usuario, Long> {
 
 
   Usuario findByNome(String nome);

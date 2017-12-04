@@ -26,7 +26,7 @@ public class Produto {
   @NotEmpty(message = "A marca do produto não pode ser vazia.")
   private String marca;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   @NotEmpty(message = "A referencia do produto não pode ser vazia.")
   private String referencia;
 
@@ -39,7 +39,7 @@ public class Produto {
   private String descricao;
 
   @Column(nullable = false)
-  @DecimalMin(value = "0.0", message = "Não existe quantidade negativa.")
+  @DecimalMin(value = "0.0", message = "Não existe quantidade de produtos negativo.")
   private double quantidade;
 
 

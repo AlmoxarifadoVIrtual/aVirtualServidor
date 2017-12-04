@@ -1,9 +1,7 @@
 package almoxarifadovirtual.servidor.servico;
 
-import almoxarifadovirtual.servidor.excecoes.PermissaoException;
-import almoxarifadovirtual.servidor.excecoes.TokenException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
-import almoxarifadovirtual.servidor.repositorio.RepositorioToken;
+import almoxarifadovirtual.servidor.repositorio.RepositorioDeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ServicoToken {
 
   @Autowired
-  RepositorioToken repository;
+  RepositorioDeToken repository;
 
   public void deletarToken(Token token) {
     repository.delete(token);
