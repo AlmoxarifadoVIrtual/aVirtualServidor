@@ -116,7 +116,6 @@ public class ControleDeUsuario {
       @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
-
     return servicoUsuario.getUsuariosPelaFuncao(funcaoUsuario);
   }
 }

@@ -1,5 +1,6 @@
 package almoxarifadovirtual.servidor.controle;
 
+import almoxarifadovirtual.servidor.excecoes.TokenException;
 import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Credenciais;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
@@ -8,9 +9,10 @@ import almoxarifadovirtual.servidor.servico.ServicoToken;
 import almoxarifadovirtual.servidor.servico.ServicoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -59,6 +61,22 @@ public class ControleDeAcesso {
     return token.getChave();
   }
 
+  @GetMapping
+  @ResponseBody
+  public String getFuncao(@RequestHeader String chave) {
+
+    Token token = servicoToken.validarToken(chave);
+
+    if (token == null) {
+      throw new TokenException();
+
+    } else {
+
+      Usuario usuario = servicoUsuario.getUsuarioPelaId(token.getUsuarioId());
+      return usuario.getFuncao().toString();
+    }
+  }
+
   /**
    * Método que realiza o logout do sistema removendo o token correspondente a chave.
    *
@@ -66,7 +84,8 @@ public class ControleDeAcesso {
    */
   @DeleteMapping
   @ResponseBody
-  public void logout(@PathVariable("chave") String chave) {
+  public void logout(@RequestHeader String chave) {
+
     Token token = servicoToken.getTokenByChave(chave);
     if (token != null) {
       servicoToken.deletarToken(token);
