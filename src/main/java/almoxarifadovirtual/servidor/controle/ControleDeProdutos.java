@@ -2,7 +2,7 @@ package almoxarifadovirtual.servidor.controle;
 
 import almoxarifadovirtual.servidor.excecoes.ProdutoInexistenteException;
 import almoxarifadovirtual.servidor.excecoes.ProdutoInsuficienteException;
-import almoxarifadovirtual.servidor.modelo.operacao.Operacao;
+//import almoxarifadovirtual.servidor.modelo.operacao.Operacao;
 import almoxarifadovirtual.servidor.modelo.produto.Produto;
 import almoxarifadovirtual.servidor.servico.ServicoDeProduto;
 import java.util.List;
@@ -141,10 +141,10 @@ public class ControleDeProdutos {
     }
   }
 
-  @GetMapping("/{tipoOperacao}")
-  @ResponseBody
-  public List<Operacao> listarOperacoes(@PathVariable("tipoOperacao") String tipoOperacao,
-      @RequestHeader String chave) {
-    return null;
-  }
+//  @GetMapping("/{tipoOperacao}")
+//  @ResponseBody
+//  public List<Operacao> listarOperacoes(@PathVariable("tipoOperacao") String tipoOperacao,
+//      @RequestHeader String chave) {
+//    return null;
+//  }
 }
