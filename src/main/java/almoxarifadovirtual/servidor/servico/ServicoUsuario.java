@@ -2,7 +2,7 @@ package almoxarifadovirtual.servidor.servico;
 
 import almoxarifadovirtual.servidor.modelo.usuario.FuncaoUsuario;
 import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
-import almoxarifadovirtual.servidor.repositorio.RepositorioUsuario;
+import almoxarifadovirtual.servidor.repositorio.RepositorioDeUsuario;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 public class ServicoUsuario {
 
   @Autowired
-  private RepositorioUsuario repositorio;
+  private RepositorioDeUsuario repositorio;
 
-  public void setRepositorio(RepositorioUsuario repositorio) {
+  public void setRepositorio(RepositorioDeUsuario repositorio) {
     this.repositorio = repositorio;
   }
 

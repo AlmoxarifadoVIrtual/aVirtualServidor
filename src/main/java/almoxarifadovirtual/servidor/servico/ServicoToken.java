@@ -1,9 +1,7 @@
 package almoxarifadovirtual.servidor.servico;
 
-import almoxarifadovirtual.servidor.excecoes.PermissaoException;
-import almoxarifadovirtual.servidor.excecoes.TokenException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
-import almoxarifadovirtual.servidor.repositorio.RepositorioToken;
+import almoxarifadovirtual.servidor.repositorio.RepositorioDeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class ServicoToken {
 
   @Autowired
-  RepositorioToken repository;
+  RepositorioDeToken repository;
 
   public void deletarToken(Token token) {
     repository.delete(token);
@@ -37,13 +35,11 @@ public class ServicoToken {
   public Token validarToken(String chave) {
     Token token = getTokenByChave(chave);
 
-    if (token == null) {
-      throw new TokenException();
-    } else if (token.validarToken()) {
+    if (token != null && token.validarToken()) {
       return token;
     } else {
       deletarToken(token);
-      throw new TokenException(token.getExpirationDate());
+      return null;
     }
   }
 
@@ -58,10 +54,10 @@ public class ServicoToken {
 
     Token token = validarToken(chave);
 
-    if (token.getUsuarioId().equals(id)) {
+    if (token != null && token.getUsuarioId().equals(id)) {
       return true;
     } else {
-      throw new PermissaoException();
+      return false;
     }
   }
 }

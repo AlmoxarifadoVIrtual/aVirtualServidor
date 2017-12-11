@@ -1,6 +1,7 @@
 package almoxarifadovirtual.servidor.controle;
 
 import almoxarifadovirtual.servidor.excecoes.PermissaoException;
+import almoxarifadovirtual.servidor.excecoes.TokenException;
 import almoxarifadovirtual.servidor.excecoes.UsuarioException;
 import almoxarifadovirtual.servidor.modelo.autenticacao.Token;
 import almoxarifadovirtual.servidor.servico.ServicoLdap;
@@ -36,7 +37,9 @@ public class ControleDeAutenticacao {
   protected void validarAdmin(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    if (!servicoUsuario.validarAdmin(token.getUsuarioId())) {
+    if (token == null) {
+      throw new TokenException();
+    } else if (!servicoUsuario.validarAdmin(token.getUsuarioId())) {
       throw new PermissaoException();
     }
   }
@@ -44,7 +47,9 @@ public class ControleDeAutenticacao {
   protected void validarAlmoxarife(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    if (!servicoUsuario.validarAlmoxarife(token.getUsuarioId())) {
+    if (token == null) {
+      throw new TokenException();
+    } else if (!servicoUsuario.validarAlmoxarife(token.getUsuarioId())) {
       throw new PermissaoException();
     }
   }
@@ -52,7 +57,10 @@ public class ControleDeAutenticacao {
   protected void validarPrestador(String chave) {
 
     Token token = servicoToken.validarToken(chave);
-    if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
+    if (token == null) {
+      throw new TokenException();
+    }
+    else if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
       throw new PermissaoException();
     }
   }
@@ -60,8 +68,10 @@ public class ControleDeAutenticacao {
   protected void validarUsuarioOuAdmin(String chave, Long id) {
 
     Token token = servicoToken.validarToken(chave);
-    if (!servicoUsuario.validarAdmin(token.getUsuarioId())
-        && !servicoToken.validarUsuarioId(chave, id)) {
+    if (token == null) {
+      throw new TokenException();
+    } else if ((!servicoUsuario.validarAdmin(token.getUsuarioId())
+        && !servicoToken.validarUsuarioId(chave, id))) {
       throw new PermissaoException();
     }
   }
