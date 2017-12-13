@@ -36,6 +36,12 @@ public class ControleDeProdutos {
   @Autowired
   ControleDeAutenticacao controleDeAutenticacao;
 
+  /**
+   * Método para inserir um novo produto no estoque, ou alterar sua quantidade.
+   * @param produto - produto que será inserido ou modificado.
+   * @param chave - String de autenticação de autorização da operação.
+   * @return - O objeto produto atualizado conforme se encontra no Banco de Dados.
+   */
   @PostMapping
   @ResponseBody
   public Produto inserirProduto(@RequestBody Produto produto, @RequestHeader String chave) {
@@ -70,6 +76,12 @@ public class ControleDeProdutos {
     }
   }
 
+  /**
+   * Método que retira produtos do estoque.
+   * @param id - Identificação do produto.
+   * @param quantidadeRetirada - Quantidade a ser removida.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   */
   @DeleteMapping("/{id}/{quantidadeRetirada}")
   @ResponseBody
   public void retirarProduto(@PathVariable("id") Long id,
@@ -102,6 +114,12 @@ public class ControleDeProdutos {
     }
   }
 
+  /**
+   * Método que recupera um produto.
+   * @param id - Id do produto
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Objeto do tipo produto correspondente a Id.
+   */
   @GetMapping("/{id}")
   @ResponseBody
   public Produto getProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
@@ -114,6 +132,11 @@ public class ControleDeProdutos {
     return produto;
   }
 
+  /**
+   * Método que lista todos os produtos cadastrados no estoque.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Lista com todos os produtos cadastrados no estoque.
+   */
   @GetMapping("/listar")
   @ResponseBody
   public List<Produto> listarProdutos(@RequestHeader String chave) {
@@ -126,6 +149,12 @@ public class ControleDeProdutos {
     return produtos;
   }
 
+  /**
+   * Método que recupera uma lista de produtos filtrada pelo nome.
+   * @param nomeDoProduto - String contendo o nome do produto a ser pesquisado.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Uma lista contendo todos os produtos com o nome idêntico ao do parâmetro.
+   */
   @GetMapping("/listar/nome/{nomeDoProduto}")
   @ResponseBody
   public List<Produto> encontrarProdutosPeloNome(
@@ -139,6 +168,12 @@ public class ControleDeProdutos {
     return produtos;
   }
 
+  /**
+   * Método que recupera uma lista de produtos pela marca.
+   * @param marcaDoProduto String contendo a marca do produto a ser pesquisado.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Uma lista contendo todos os produtos com a  marca idêntica ao do parâmetro.
+   */
   @GetMapping("/listar/marca/{marcaDoProduto}")
   @ResponseBody
   public List<Produto> encontrarProdutosPelaMarca(
@@ -152,6 +187,12 @@ public class ControleDeProdutos {
     return produtos;
   }
 
+  /**
+   * Método que recupera um produto a partir da referência.
+   * @param referenciaDoProduto - String contendo a referência a ser pesquisada.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Um produto com a referência igual ao parâmetro.
+   */
   @GetMapping("/listar/referencia/{referenciaDoProduto}")
   @ResponseBody
   public Produto encontrarProdutoPelaReferencia(
@@ -166,6 +207,12 @@ public class ControleDeProdutos {
     return produto;
   }
 
+  /**
+   * Método que recupera uma lista de produtos que contém a descrição.
+   * @param descricaoDoProduto String contendo a descrição do produto a ser pesquisada.
+   * @param chave - String que identifica o usuaŕio que está solicitando a operação.
+   * @return Uma lista contendo todos os produtos que contém a descrição do parâmetro.
+   */
   @GetMapping("/listar/descricao/{descricaoDoProduto}")
   @ResponseBody
   public List<Produto> findProdutosByDescricaoIsContaining(
