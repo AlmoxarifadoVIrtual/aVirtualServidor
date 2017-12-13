@@ -1,10 +1,17 @@
 package almoxarifadovirtual.servidor.controle;
 
+import almoxarifadovirtual.servidor.excecoes.ProdutoCadastradoException;
 import almoxarifadovirtual.servidor.excecoes.ProdutoInexistenteException;
 import almoxarifadovirtual.servidor.excecoes.ProdutoInsuficienteException;
 //import almoxarifadovirtual.servidor.modelo.operacao.Operacao;
+import almoxarifadovirtual.servidor.excecoes.QuantidadeProdutoException;
+import almoxarifadovirtual.servidor.modelo.operacao.Operacao;
+import almoxarifadovirtual.servidor.modelo.operacao.TipoDeOperacao;
 import almoxarifadovirtual.servidor.modelo.produto.Produto;
+import almoxarifadovirtual.servidor.servico.ServicoDeOperacao;
 import almoxarifadovirtual.servidor.servico.ServicoDeProduto;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,13 +32,43 @@ public class ControleDeProdutos {
   ServicoDeProduto servicoDeProduto;
 
   @Autowired
+  ServicoDeOperacao servicoDeOperacao;
+
+  @Autowired
   ControleDeAutenticacao controleDeAutenticacao;
 
   @PostMapping
   @ResponseBody
-  public Produto cadastrarProduto(@RequestBody Produto produto, @RequestHeader String chave) {
-    controleDeAutenticacao.validarAlmoxarife(chave);
-    return servicoDeProduto.salvarProduto(produto);
+  public Produto inserirProduto(@RequestBody Produto produto, @RequestHeader String chave) {
+
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
+    Produto produtoCadastrado = servicoDeProduto.encontrarProduto(produto.getId());
+
+    if(produtoCadastrado.equals(produto)){
+      double armazenado = produtoCadastrado.getQuantidade();
+      double inserido = produto.getQuantidade();
+
+      if(inserido > 0) {
+        produtoCadastrado.setQuantidade(armazenado + inserido);
+        Operacao deposito = new Operacao(TipoDeOperacao.DEPOSITO, LocalDateTime.now().toString(),
+            Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
+        servicoDeOperacao.save(deposito);
+        return servicoDeProduto.salvarProduto(produtoCadastrado);
+
+      } else {
+        throw new QuantidadeProdutoException();
+      }
+
+    } else if (produtoCadastrado != null && produtoCadastrado.getId().equals(produto.getId())) {
+      throw new ProdutoCadastradoException();
+
+    } else {
+      Operacao cadastro = new Operacao(TipoDeOperacao.CADASTRO, LocalDateTime.now().toString(),
+          Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
+      servicoDeOperacao.save(cadastro);
+
+      return servicoDeProduto.salvarProduto(produto);
+    }
   }
 
   @DeleteMapping("/{id}/{quantidadeRetirada}")
@@ -39,7 +76,7 @@ public class ControleDeProdutos {
   public void retirarProduto(@PathVariable("id") Long id,
       @PathVariable("quantidadeRetirada") double quantidadeRetirada, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     Produto produto = servicoDeProduto.encontrarProduto(id);
     validarProduto(produto);
@@ -50,6 +87,10 @@ public class ControleDeProdutos {
 
       produto.setQuantidade(qntDisponivel - quantidadeRetirada);
       servicoDeProduto.salvarProduto(produto);
+
+      Operacao retirada = new Operacao(TipoDeOperacao.RETIRADA, LocalDateTime.now().toString(),
+          Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
+      servicoDeOperacao.save(retirada);
 
     } else {
       throw new ProdutoInsuficienteException();
@@ -66,7 +107,7 @@ public class ControleDeProdutos {
   @ResponseBody
   public Produto getProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     Produto produto = servicoDeProduto.encontrarProduto(id);
     validarProduto(produto);
@@ -78,7 +119,7 @@ public class ControleDeProdutos {
   @ResponseBody
   public List<Produto> listarProdutos(@RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     List<Produto> produtos = servicoDeProduto.listarProdutos();
     validarProdutos(produtos);
@@ -91,7 +132,7 @@ public class ControleDeProdutos {
   public List<Produto> encontrarProdutosPeloNome(
       @PathVariable("nomeDoProduto") String nomeDoProduto, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     List<Produto> produtos = servicoDeProduto.encontrarProdutoPeloNome(nomeDoProduto);
     validarProdutos(produtos);
@@ -104,7 +145,7 @@ public class ControleDeProdutos {
   public List<Produto> encontrarProdutosPelaMarca(
       @PathVariable("marcaDoProduto") String marcaDoProduto, @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     List<Produto> produtos = servicoDeProduto.encontrarProdutoPelaMarca(marcaDoProduto);
     validarProdutos(produtos);
@@ -118,7 +159,7 @@ public class ControleDeProdutos {
       @PathVariable("referenciaDoProduto") String referenciaDoProduto,
       @RequestHeader String chave) {
 
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     Produto produto = servicoDeProduto.encontrarProdutoPelaReferencia(referenciaDoProduto);
     validarProduto(produto);
@@ -129,7 +170,7 @@ public class ControleDeProdutos {
   @GetMapping("/listar/descricao/{descricaoDoProduto}")
   @ResponseBody
   public List<Produto> findProdutosByDescricaoIsContaining(@PathVariable("descricaoDoProduto") String descricaoDoProduto, @RequestHeader String chave) {
-    controleDeAutenticacao.validarAlmoxarife(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
     List<Produto> produtos = servicoDeProduto.findProdutosByDescricaoIsContaining(descricaoDoProduto);
     validarProdutos(produtos);
     return produtos;
@@ -141,10 +182,28 @@ public class ControleDeProdutos {
     }
   }
 
-//  @GetMapping("/{tipoOperacao}")
-//  @ResponseBody
-//  public List<Operacao> listarOperacoes(@PathVariable("tipoOperacao") String tipoOperacao,
-//      @RequestHeader String chave) {
-//    return null;
-//  }
+  // Métodos relativos ao registro das operações de inserção e retirada de produtos
+
+  @GetMapping("/operacao")
+  @ResponseBody
+  public List<Operacao> listarOperacoes(@RequestHeader String chave) {
+    controleDeAutenticacao.validarAdmin(chave);
+    return servicoDeOperacao.findAll();
+  }
+
+  @GetMapping("/operacao/tipo/{tipoOperacao}")
+  @ResponseBody
+  public List<Operacao> listarOperacoesPorTipo(@PathVariable("tipoOperacao") String tipoOperacao,
+      @RequestHeader String chave) {
+    controleDeAutenticacao.validarAdmin(chave);
+    return servicoDeOperacao.findByTipoDeOperacao(tipoOperacao);
+  }
+
+  @GetMapping("/operacao/usuario/{usuarioId}")
+  @ResponseBody
+  public List<Operacao> listarOperacoesPorUsuarioId(@PathVariable("usuarioId") Long usuarioId,
+      @RequestHeader String chave) {
+    controleDeAutenticacao.validarAdmin(chave);
+    return servicoDeOperacao.findByUsuarioId(usuarioId);
+  }
 }
