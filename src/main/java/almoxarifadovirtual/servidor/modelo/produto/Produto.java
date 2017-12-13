@@ -44,7 +44,8 @@ public class Produto {
   private double quantidade;
 
 
-  public Produto() {}
+  public Produto() {
+  }
 
   public Long getId() {
     return id;
@@ -111,12 +112,12 @@ public class Produto {
       return false;
     }
     Produto produto = (Produto) o;
-    return Objects.equals(getId(), produto.getId()) &&
-        Objects.equals(getNome(), produto.getNome()) &&
-        Objects.equals(getMarca(), produto.getMarca()) &&
-        Objects.equals(getReferencia(), produto.getReferencia()) &&
-        Objects.equals(getCor(), produto.getCor()) &&
-        Objects.equals(getDescricao(), produto.getDescricao());
+    return Objects.equals(getId(), produto.getId())
+        && Objects.equals(getNome(), produto.getNome())
+        && Objects.equals(getMarca(), produto.getMarca())
+        && Objects.equals(getReferencia(), produto.getReferencia())
+        && Objects.equals(getCor(), produto.getCor())
+        && Objects.equals(getDescricao(), produto.getDescricao());
   }
 
   @Override

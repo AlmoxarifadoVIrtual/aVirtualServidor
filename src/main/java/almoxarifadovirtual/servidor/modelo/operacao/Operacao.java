@@ -32,6 +32,13 @@ public class Operacao {
 
   public Operacao() {}
 
+  /**
+   * Contrutor de um objeto do tipo Operacao.
+   * @param tipoDeOperacao - Tipo da operação que está sendo criada.
+   * @param dataDaOperacao - Data em que a operação foi realizada.
+   * @param produtos - Produtos que foram modificados na operação, com a quantidade modificada.
+   * @param usuarioId - Id do usuário que realizou a operação.
+   */
   public Operacao(TipoDeOperacao tipoDeOperacao, String dataDaOperacao,
       List<Produto> produtos, Long usuarioId) {
     this.tipoDeOperacao = tipoDeOperacao;

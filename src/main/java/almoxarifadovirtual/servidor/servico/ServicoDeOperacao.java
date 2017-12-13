@@ -20,7 +20,8 @@ public class ServicoDeOperacao {
   }
 
   public List<Operacao> findByTipoDeOperacao(String tipoDeOperacao) {
-    return repositorioDeOperacao.findByTipoDeOperacao(TipoDeOperacao.selecionarTipo(tipoDeOperacao));
+    return repositorioDeOperacao
+        .findByTipoDeOperacao(TipoDeOperacao.selecionarTipo(tipoDeOperacao));
   }
 
   public List<Operacao> findAll() {
