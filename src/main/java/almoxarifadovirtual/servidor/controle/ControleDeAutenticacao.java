@@ -22,6 +22,10 @@ public class ControleDeAutenticacao {
   @Autowired
   ServicoUsuario servicoUsuario;
 
+  protected Long getUsuarioId(String chave) {
+    return servicoToken.getTokenByChave(chave).getUsuarioId();
+  }
+
   protected void validarAcessoLdap(String login, String senha) {
     if (!servicoLdap.validarUsuarioLdap(login, senha)) {
       throw new UsuarioException();
@@ -44,12 +48,13 @@ public class ControleDeAutenticacao {
     }
   }
 
-  protected void validarAlmoxarife(String chave) {
+  protected void validarAlmoxarifeOuAdmin(String chave) {
 
     Token token = servicoToken.validarToken(chave);
     if (token == null) {
       throw new TokenException();
-    } else if (!servicoUsuario.validarAlmoxarife(token.getUsuarioId())) {
+    } else if (!servicoUsuario.validarAlmoxarife(token.getUsuarioId()) && !servicoUsuario
+        .validarAdmin(token.getUsuarioId())) {
       throw new PermissaoException();
     }
   }
@@ -59,8 +64,7 @@ public class ControleDeAutenticacao {
     Token token = servicoToken.validarToken(chave);
     if (token == null) {
       throw new TokenException();
-    }
-    else if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
+    } else if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
       throw new PermissaoException();
     }
   }

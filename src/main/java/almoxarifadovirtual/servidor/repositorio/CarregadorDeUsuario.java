@@ -11,18 +11,18 @@ import org.springframework.stereotype.Component;
 public class CarregadorDeUsuario implements ApplicationRunner {
 
 
-    private final RepositorioDeUsuario repositorioDeUsuario;
+  private final RepositorioDeUsuario repositorioDeUsuario;
 
-    @Autowired
-    public CarregadorDeUsuario(RepositorioDeUsuario repositorioDeUsuario) {
-      this.repositorioDeUsuario = repositorioDeUsuario;
-    }
-
-    @Override
-    public void run(ApplicationArguments applicationArguments) throws Exception {
-      Usuario admin = new Usuario();
-      admin.setFuncao(FuncaoUsuario.ADMINISTRADOR);
-      admin.setNome("Alessandro");
-      repositorioDeUsuario.save(admin);
-    }
+  @Autowired
+  public CarregadorDeUsuario(RepositorioDeUsuario repositorioDeUsuario) {
+    this.repositorioDeUsuario = repositorioDeUsuario;
   }
+
+  @Override
+  public void run(ApplicationArguments applicationArguments) throws Exception {
+    Usuario admin = new Usuario();
+    admin.setFuncao(FuncaoUsuario.ADMINISTRADOR);
+    admin.setNome("Alessandro");
+    repositorioDeUsuario.save(admin);
+  }
+}

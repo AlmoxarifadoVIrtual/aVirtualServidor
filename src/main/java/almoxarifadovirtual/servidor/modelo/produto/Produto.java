@@ -1,5 +1,6 @@
 package almoxarifadovirtual.servidor.modelo.produto;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,8 @@ public class Produto {
   private double quantidade;
 
 
-  public Produto() {}
+  public Produto() {
+  }
 
   public Long getId() {
     return id;
@@ -99,5 +101,28 @@ public class Produto {
 
   public void setQuantidade(double quantidade) {
     this.quantidade = quantidade;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    Produto produto = (Produto) o;
+    return Objects.equals(getId(), produto.getId())
+        && Objects.equals(getNome(), produto.getNome())
+        && Objects.equals(getMarca(), produto.getMarca())
+        && Objects.equals(getReferencia(), produto.getReferencia())
+        && Objects.equals(getCor(), produto.getCor())
+        && Objects.equals(getDescricao(), produto.getDescricao());
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao());
   }
 }

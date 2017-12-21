@@ -61,6 +61,11 @@ public class ControleDeAcesso {
     return token.getChave();
   }
 
+  /**
+   * Método que retorna a função do usuário a partir de sua chave de acesso.
+   * @param chave - Chave de acesso do usuário.
+   * @return String com o nome da funcao de cadastro do usuario.
+   */
   @GetMapping
   @ResponseBody
   public String getFuncao(@RequestHeader String chave) {

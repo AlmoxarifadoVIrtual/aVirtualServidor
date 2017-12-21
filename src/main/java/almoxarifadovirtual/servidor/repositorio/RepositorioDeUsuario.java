@@ -15,9 +15,7 @@ public interface RepositorioDeUsuario extends JpaRepository<Usuario, Long> {
   Usuario findByNome(String nome);
 
   /**
-   * Método que retorna o cliente com apenas seu nome fazendo a busca com o id passado como
-   * parâmetro.
-   *
+   * Método que retorna uma lista de usuarios a partir da funcao passada como parâmetro.
    * @return lista de usuarios com a funcao passada como parametro.
    */
   @Query("SELECT usr FROM Usuario usr where usr.funcao = :funcao")

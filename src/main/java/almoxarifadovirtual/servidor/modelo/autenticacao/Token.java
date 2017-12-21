@@ -38,8 +38,6 @@ public class Token {
    */
   public Token(Long usuarioId) {
     setExpirationDate(LocalDateTime.now().plusHours(UMA_HORA));
-    System.out.println(getExpirationDate());
-    System.out.println(LocalDateTime.now().toString());
     setChave(UUID.randomUUID().toString());
     setUsuarioId(usuarioId);
   }
