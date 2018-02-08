@@ -8,6 +8,9 @@ import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.servico.ServicoToken;
 import almoxarifadovirtual.servidor.servico.ServicoUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,7 +44,7 @@ public class ControleDeAcesso {
    */
   @PostMapping
   @ResponseBody
-  public String logIn(@RequestBody Credenciais credenciais) {
+  public ResponseEntity<String> logIn(@RequestBody Credenciais credenciais) {
 
     controleDeAutenticacao.validarAcessoLdap(credenciais.getLogin(), credenciais.getSenha());
 
@@ -58,7 +61,11 @@ public class ControleDeAcesso {
       token = servicoToken.gerarToken(usuario.getId());
     }
 
-    return token.getChave();
+    HttpHeaders responseHeaders = new HttpHeaders();
+    responseHeaders.set("Access-Control-Allow-Origin", "*");
+
+    return new ResponseEntity<String>(token.getChave(), responseHeaders, HttpStatus.OK);
+
   }
 
   /**
