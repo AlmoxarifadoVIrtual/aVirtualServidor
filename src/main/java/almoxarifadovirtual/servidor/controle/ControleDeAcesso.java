@@ -61,11 +61,7 @@ public class ControleDeAcesso {
       token = servicoToken.gerarToken(usuario.getId());
     }
 
-    HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.set("Access-Control-Allow-Origin", "*");
-
-    return new ResponseEntity<String>(token.getChave(), responseHeaders, HttpStatus.OK);
-
+    return Utils.generateResponse(token.getChave());
   }
 
   /**
@@ -75,7 +71,7 @@ public class ControleDeAcesso {
    */
   @GetMapping
   @ResponseBody
-  public String getFuncao(@RequestHeader String chave) {
+  public ResponseEntity<String> getFuncao(@RequestHeader String chave) {
 
     Token token = servicoToken.validarToken(chave);
 
@@ -85,7 +81,7 @@ public class ControleDeAcesso {
     } else {
 
       Usuario usuario = servicoUsuario.getUsuarioPelaId(token.getUsuarioId());
-      return usuario.getFuncao().toString();
+      return Utils.generateResponse(usuario.getFuncao().toString());
     }
   }
 

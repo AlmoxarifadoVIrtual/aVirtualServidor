@@ -4,6 +4,8 @@ import almoxarifadovirtual.servidor.modelo.reserva.Reserva;
 import almoxarifadovirtual.servidor.servico.ServicoDeReserva;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -23,39 +25,42 @@ public class ControleDeReservas {
 
   @PostMapping
   @ResponseBody
-  public Reserva registrarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
+  public ResponseEntity<Reserva> registrarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
       controleDeAutenticacao.validarPrestador(chave);
-      return servicoDeReserva.salvarReserva(reserva);
+      return Utils.generateResponse(servicoDeReserva.salvarReserva(reserva));
   }
 
-  @PostMapping
+  @PostMapping("/concluir")
   @ResponseBody
-  public Reserva concluirReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
+  public ResponseEntity<Reserva> concluirReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
-    return servicoDeReserva.concluirReserva(reserva);
+    return Utils.generateResponse(servicoDeReserva.concluirReserva(reserva));
   }
 
-  @PostMapping
+  @PostMapping("/liberar")
   @ResponseBody
-  public Reserva liberarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
+  public ResponseEntity<Reserva> liberarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
-    return servicoDeReserva.liberarReserva(reserva);
+    return Utils.generateResponse(servicoDeReserva.liberarReserva(reserva));
   }
 
-  @PostMapping
+  @PostMapping("/atualizar")
   @ResponseBody
-  public Reserva atualizarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
+  public ResponseEntity<Reserva> atualizarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
     controleDeAutenticacao.validarPrestador(chave);
-    return servicoDeReserva.atualizarReserva(reserva);
+    return Utils.generateResponse(servicoDeReserva.atualizarReserva(reserva));
   }
 
-  public List<Reserva> getReservas(@RequestHeader String chave){
+  @GetMapping
+  @ResponseBody
+  public ResponseEntity<List<Reserva>> getReservas(@RequestHeader String chave){
+
     controleDeAutenticacao.validarUsuario(chave);
-    return servicoDeReserva.getReservas();
+    return Utils.generateResponse(servicoDeReserva.getReservas());
   }
 
 }
