@@ -4,6 +4,7 @@ import almoxarifadovirtual.servidor.modelo.usuario.Usuario;
 import almoxarifadovirtual.servidor.servico.ServicoUsuario;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,10 +36,10 @@ public class ControleDeUsuario {
    */
   @PostMapping
   @ResponseBody
-  public Usuario criarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
+  public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoUsuario.create(usuario);
+    return Utils.generateResponse(servicoUsuario.create(usuario));
   }
 
   /**
@@ -50,10 +51,10 @@ public class ControleDeUsuario {
    */
   @GetMapping("/{id}")
   @ResponseBody
-  public Usuario getUsuarioPelaId(@PathVariable("id") Long id, @RequestHeader String chave) {
+  public ResponseEntity<Usuario> getUsuarioPelaId(@PathVariable("id") Long id, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarUsuarioOuAdmin(chave, id);
-    return servicoUsuario.getUsuarioPelaId(id);
+    return Utils.generateResponse(servicoUsuario.getUsuarioPelaId(id));
   }
 
   /**
@@ -65,12 +66,12 @@ public class ControleDeUsuario {
    */
   @PutMapping("/{id}")
   @ResponseBody
-  public boolean atualizarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
+  public ResponseEntity<Boolean> atualizarUsuario(@RequestBody Usuario usuario, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
     controleDeAutenticacao.validarUsuarioLdap(usuario.getNome());
 
-    return servicoUsuario.update(usuario);
+    return Utils.generateResponse(servicoUsuario.update(usuario));
   }
 
   /**
@@ -82,11 +83,11 @@ public class ControleDeUsuario {
    */
   @DeleteMapping("/{id}")
   @ResponseBody
-  public boolean removerUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
+  public ResponseEntity<Boolean> removerUsuario(@PathVariable("id") Long id, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarUsuarioOuAdmin(chave, id);
 
-    return servicoUsuario.delete(id);
+    return Utils.generateResponse(servicoUsuario.delete(id));
   }
 
   /**
@@ -97,10 +98,10 @@ public class ControleDeUsuario {
    */
   @GetMapping("/listar")
   @ResponseBody
-  public List<Usuario> getAll(@RequestHeader String chave) {
+  public ResponseEntity<List<Usuario>> getAll(@RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoUsuario.getAll();
+    return Utils.generateResponse(servicoUsuario.getAll());
   }
 
   /**
@@ -112,10 +113,10 @@ public class ControleDeUsuario {
    */
   @GetMapping("/listar/{funcaoUsuario}")
   @ResponseBody
-  private List<Usuario> getUsuarioByFuncao(@PathVariable("funcaoUsuario") String funcaoUsuario,
+  private ResponseEntity<List<Usuario>> getUsuarioByFuncao(@PathVariable("funcaoUsuario") String funcaoUsuario,
       @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoUsuario.getUsuariosPelaFuncao(funcaoUsuario);
+    return Utils.generateResponse(servicoUsuario.getUsuariosPelaFuncao(funcaoUsuario));
   }
 }

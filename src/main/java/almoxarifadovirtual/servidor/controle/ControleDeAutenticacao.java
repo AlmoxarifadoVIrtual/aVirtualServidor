@@ -79,4 +79,14 @@ public class ControleDeAutenticacao {
       throw new PermissaoException();
     }
   }
+
+  public void validarUsuario(String chave) {
+
+    Token token = servicoToken.getTokenByChave(chave);
+
+    if (token == null) {
+      throw new TokenException();
+    }
+  }
+
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -44,7 +45,7 @@ public class ControleDeProdutos {
    */
   @PostMapping
   @ResponseBody
-  public Produto inserirProduto(@RequestBody Produto produto, @RequestHeader String chave) {
+  public ResponseEntity<Produto> inserirProduto(@RequestBody Produto produto, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
     Produto produtoCadastrado = servicoDeProduto.encontrarProduto(produto.getId());
@@ -54,7 +55,7 @@ public class ControleDeProdutos {
           Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
       servicoDeOperacao.save(cadastro);
 
-      return servicoDeProduto.salvarProduto(produto);
+      return Utils.generateResponse(servicoDeProduto.salvarProduto(produto));
 
     } else if (produtoCadastrado.equals(produto)) {
       double armazenado = produtoCadastrado.getQuantidade();
@@ -65,7 +66,7 @@ public class ControleDeProdutos {
         Operacao deposito = new Operacao(TipoDeOperacao.DEPOSITO, LocalDateTime.now().toString(),
             Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
         servicoDeOperacao.save(deposito);
-        return servicoDeProduto.salvarProduto(produtoCadastrado);
+        return Utils.generateResponse(servicoDeProduto.salvarProduto(produtoCadastrado));
 
       } else {
         throw new QuantidadeProdutoException();
@@ -122,14 +123,14 @@ public class ControleDeProdutos {
    */
   @GetMapping("/{id}")
   @ResponseBody
-  public Produto getProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
+  public ResponseEntity<Produto> getProduto(@PathVariable("id") Long id, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     Produto produto = servicoDeProduto.encontrarProduto(id);
     validarProduto(produto);
 
-    return produto;
+    return Utils.generateResponse(produto);
   }
 
   /**
@@ -139,14 +140,14 @@ public class ControleDeProdutos {
    */
   @GetMapping("/listar")
   @ResponseBody
-  public List<Produto> listarProdutos(@RequestHeader String chave) {
+  public ResponseEntity<List<Produto>> listarProdutos(@RequestHeader String chave) {
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
 
     List<Produto> produtos = servicoDeProduto.listarProdutos();
     validarProdutos(produtos);
 
-    return produtos;
+    return Utils.generateResponse(produtos);
   }
 
   /**
@@ -157,7 +158,7 @@ public class ControleDeProdutos {
    */
   @GetMapping("/listar/nome/{nomeDoProduto}")
   @ResponseBody
-  public List<Produto> encontrarProdutosPeloNome(
+  public ResponseEntity<List<Produto>> encontrarProdutosPeloNome(
       @PathVariable("nomeDoProduto") String nomeDoProduto, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
@@ -165,7 +166,7 @@ public class ControleDeProdutos {
     List<Produto> produtos = servicoDeProduto.encontrarProdutoPeloNome(nomeDoProduto);
     validarProdutos(produtos);
 
-    return produtos;
+    return Utils.generateResponse(produtos);
   }
 
   /**
@@ -176,7 +177,7 @@ public class ControleDeProdutos {
    */
   @GetMapping("/listar/marca/{marcaDoProduto}")
   @ResponseBody
-  public List<Produto> encontrarProdutosPelaMarca(
+  public ResponseEntity<List<Produto>> encontrarProdutosPelaMarca(
       @PathVariable("marcaDoProduto") String marcaDoProduto, @RequestHeader String chave) {
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
@@ -184,7 +185,7 @@ public class ControleDeProdutos {
     List<Produto> produtos = servicoDeProduto.encontrarProdutoPelaMarca(marcaDoProduto);
     validarProdutos(produtos);
 
-    return produtos;
+    return Utils.generateResponse(produtos);
   }
 
   /**
@@ -195,7 +196,7 @@ public class ControleDeProdutos {
    */
   @GetMapping("/listar/referencia/{referenciaDoProduto}")
   @ResponseBody
-  public Produto encontrarProdutoPelaReferencia(
+  public ResponseEntity<Produto> encontrarProdutoPelaReferencia(
       @PathVariable("referenciaDoProduto") String referenciaDoProduto,
       @RequestHeader String chave) {
 
@@ -204,7 +205,7 @@ public class ControleDeProdutos {
     Produto produto = servicoDeProduto.encontrarProdutoPelaReferencia(referenciaDoProduto);
     validarProduto(produto);
 
-    return produto;
+    return Utils.generateResponse(produto);
   }
 
   /**
@@ -215,13 +216,16 @@ public class ControleDeProdutos {
    */
   @GetMapping("/listar/descricao/{descricaoDoProduto}")
   @ResponseBody
-  public List<Produto> findProdutosByDescricaoIsContaining(
+  public ResponseEntity<List<Produto>> findProdutosByDescricaoIsContaining(
       @PathVariable("descricaoDoProduto") String descricaoDoProduto, @RequestHeader String chave) {
+
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
+
     List<Produto> produtos = servicoDeProduto
         .findProdutosByDescricaoIsContaining(descricaoDoProduto);
     validarProdutos(produtos);
-    return produtos;
+
+    return Utils.generateResponse(produtos);
   }
 
   private void validarProdutos(List<Produto> produtos) {
@@ -234,24 +238,27 @@ public class ControleDeProdutos {
 
   @GetMapping("/operacao")
   @ResponseBody
-  public List<Operacao> listarOperacoes(@RequestHeader String chave) {
+  public ResponseEntity<List<Operacao>> listarOperacoes(@RequestHeader String chave) {
+
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoDeOperacao.findAll();
+    return Utils.generateResponse(servicoDeOperacao.findAll());
   }
 
   @GetMapping("/operacao/tipo/{tipoOperacao}")
   @ResponseBody
-  public List<Operacao> listarOperacoesPorTipo(@PathVariable("tipoOperacao") String tipoOperacao,
+  public ResponseEntity<List<Operacao>> listarOperacoesPorTipo(@PathVariable("tipoOperacao") String tipoOperacao,
       @RequestHeader String chave) {
+
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoDeOperacao.findByTipoDeOperacao(tipoOperacao);
+    return Utils.generateResponse(servicoDeOperacao.findByTipoDeOperacao(tipoOperacao));
   }
 
   @GetMapping("/operacao/usuario/{usuarioId}")
   @ResponseBody
-  public List<Operacao> listarOperacoesPorUsuarioId(@PathVariable("usuarioId") Long usuarioId,
+  public ResponseEntity<List<Operacao>> listarOperacoesPorUsuarioId(@PathVariable("usuarioId") Long usuarioId,
       @RequestHeader String chave) {
     controleDeAutenticacao.validarAdmin(chave);
-    return servicoDeOperacao.findByUsuarioId(usuarioId);
+    return Utils.generateResponse(servicoDeOperacao.findByUsuarioId(usuarioId));
   }
+
 }
