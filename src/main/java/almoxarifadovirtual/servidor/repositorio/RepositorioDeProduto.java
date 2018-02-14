@@ -4,7 +4,7 @@ import almoxarifadovirtual.servidor.modelo.produto.Produto;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RepositorioDeProduto extends JpaRepository<Produto, Long> {
+  public interface RepositorioDeProduto extends JpaRepository<Produto, Long> {
 
   Produto findById(Long id);
 
