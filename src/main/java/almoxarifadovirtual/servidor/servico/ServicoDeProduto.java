@@ -53,4 +53,30 @@ public class ServicoDeProduto {
   public void removerProduto(Long idProduto) {
     repositorioDeProduto.delete(idProduto);
   }
+
+  public boolean validarRetirada(List<Produto> produtos){
+
+    for (Produto produto : produtos) {
+
+      Produto estoque = repositorioDeProduto.getOne(produto.getId());
+
+      if(produto.getQuantidade() > estoque.getQuantidade()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  public void retirarProduto(Produto produto){
+
+    Produto estoque = repositorioDeProduto.getOne(produto.getId());
+
+    if (produto.getQuantidade() >= estoque.getQuantidade()) {
+      double qnt = estoque.getQuantidade() - produto.getQuantidade();
+      estoque.setQuantidade(qnt);
+      repositorioDeProduto.save(estoque);
+    }
+
+  }
 }
