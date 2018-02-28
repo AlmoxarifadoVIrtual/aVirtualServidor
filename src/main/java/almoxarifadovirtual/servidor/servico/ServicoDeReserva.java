@@ -50,7 +50,7 @@ public class ServicoDeReserva {
   }
 
   public List<Reserva> getReservas() {
-    return repositorioDeReserva.getAll();
+    return repositorioDeReserva.findAll();
   }
 
 }

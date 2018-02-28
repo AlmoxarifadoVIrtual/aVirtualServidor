@@ -8,5 +8,4 @@ public interface RepositorioDeReserva extends JpaRepository<Reserva, Long> {
 
   Reserva getById(Long id);
 
-  List<Reserva> getAll();
 }
