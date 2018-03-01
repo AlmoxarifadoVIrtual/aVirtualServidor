@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -31,20 +32,12 @@ public class ControleDeReservas {
       return Utils.generateResponse(servicoDeReserva.salvarReserva(reserva));
   }
 
-  @PostMapping("/concluir")
+  @PostMapping("/concluir/{id}")
   @ResponseBody
-  public ResponseEntity<Reserva> concluirReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
+  public ResponseEntity<Reserva> concluirReserva(@RequestHeader String chave, @PathVariable("id") Long id){
 
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
-    return Utils.generateResponse(servicoDeReserva.concluirReserva(reserva));
-  }
-
-  @PostMapping("/liberar")
-  @ResponseBody
-  public ResponseEntity<Reserva> liberarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
-
-    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
-    return Utils.generateResponse(servicoDeReserva.liberarReserva(reserva));
+    return Utils.generateResponse(servicoDeReserva.concluirReserva(id));
   }
 
   @PostMapping("/atualizar")

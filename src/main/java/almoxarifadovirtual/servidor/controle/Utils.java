@@ -8,7 +8,7 @@ public class Utils {
 
   static <T> ResponseEntity<T> generateResponse(T body){
     HttpHeaders responseHeaders = new HttpHeaders();
-    responseHeaders.set("Access-Control-Allow-Origin", "*");
+    responseHeaders.set("Access-Control-Allow-Origin", "https://xavierlr.github.io");
 
     return new ResponseEntity<T>(body, responseHeaders, HttpStatus.OK);
   }
