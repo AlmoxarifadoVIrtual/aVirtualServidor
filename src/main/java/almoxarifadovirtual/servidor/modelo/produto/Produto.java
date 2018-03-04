@@ -40,6 +40,9 @@ public class Produto {
   @Column
   private double preco;
 
+  @Column
+  private String observacao;
+
   public Produto() {
   }
 
@@ -105,6 +108,14 @@ public class Produto {
 
   public void setPreco(double preco) {
     this.preco = preco;
+  }
+
+  public String getObservacao() {
+    return observacao;
+  }
+
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
   }
 
   @Override
