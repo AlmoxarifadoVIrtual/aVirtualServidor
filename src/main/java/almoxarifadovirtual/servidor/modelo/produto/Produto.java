@@ -16,16 +16,18 @@ public class Produto {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private Long id;
 
   @Column(nullable = false)
+  @NotEmpty(message = "O nome do produto não pode ser vazio!")
   private String nome;
 
   @Column(nullable = false)
   private String marca;
 
   @Column(nullable = false)
+  @NotEmpty(message = "A referência do produto não pode ser vazia!")
   private String referencia;
 
   @Column(nullable = false)
@@ -35,15 +37,17 @@ public class Produto {
   private String descricao;
 
   @Column(nullable = false)
+  @DecimalMin(value = "0.0", message = "A quantidade mínima deve ser maior que zero!")
   private double quantidade;
 
-  @Column
+  @Column(nullable = false)
   private UnidadeDeMedidaEnum unidadeDeMedida;
 
-  @Column
+  @Column(nullable = false)
+  @DecimalMin(value = "0.0", message = "A quantidade mínima deve ser maior que zero!")
   private double preco;
 
-  @Column
+  @Column(nullable = false)
   private String observacao;
 
   public Produto() {
