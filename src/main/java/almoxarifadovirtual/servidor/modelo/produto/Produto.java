@@ -16,33 +16,29 @@ public class Produto {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(unique = true, nullable = false)
+  @Column(unique = true)
   private Long id;
 
   @Column(nullable = false)
-  @NotEmpty(message = "O nome do produto não pode ser vazio.")
   private String nome;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A marca do produto não pode ser vazia.")
   private String marca;
 
-  @Column(nullable = false, unique = true)
-  @NotEmpty(message = "A referencia do produto não pode ser vazia.")
+  @Column(nullable = false)
   private String referencia;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A cor do produto não pode ser vazia.")
   private String cor;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A descriçao do produto não pode ser vazio.")
   private String descricao;
 
   @Column(nullable = false)
-  @DecimalMin(value = "0.0", message = "Não existe quantidade de produtos negativo.")
   private double quantidade;
 
+  @Column
+  private double preco;
 
   public Produto() {
   }
@@ -103,6 +99,14 @@ public class Produto {
     this.quantidade = quantidade;
   }
 
+  public double getPreco() {
+    return preco;
+  }
+
+  public void setPreco(double preco) {
+    this.preco = preco;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -124,5 +128,19 @@ public class Produto {
   public int hashCode() {
 
     return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao());
+  }
+
+  @Override
+  public String toString() {
+    return "Produto{" +
+        "id=" + id +
+        ", nome='" + nome + '\'' +
+        ", marca='" + marca + '\'' +
+        ", referencia='" + referencia + '\'' +
+        ", cor='" + cor + '\'' +
+        ", descricao='" + descricao + '\'' +
+        ", quantidade=" + quantidade +
+        ", preco=" + preco +
+        '}';
   }
 }

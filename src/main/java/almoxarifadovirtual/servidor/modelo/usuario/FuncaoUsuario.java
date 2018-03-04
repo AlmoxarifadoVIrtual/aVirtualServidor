@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public enum FuncaoUsuario {
 
-  ADMINISTRADOR("ADMINISTRADOR"), ALMOXARIFE("ALMOXARIFE"), PRESTADOR("PRESTADOR");
+  ADMINISTRADOR("ADMINISTRADOR"), ALMOXARIFE("ALMOXARIFE");
 
   private String valor;
 

@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.websocket.ClientEndpoint;
 
 @Entity(name = "Reserva")
 @Table(name = "tb_reserva")
@@ -84,4 +85,5 @@ public class Reserva {
   public void setData(String data) {
     this.data = data;
   }
+
 }

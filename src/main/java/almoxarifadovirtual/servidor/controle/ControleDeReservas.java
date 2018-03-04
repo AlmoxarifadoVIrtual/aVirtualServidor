@@ -28,7 +28,7 @@ public class ControleDeReservas {
   @ResponseBody
   public ResponseEntity<Reserva> registrarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
-      controleDeAutenticacao.validarPrestador(chave);
+      controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
       return Utils.generateResponse(servicoDeReserva.salvarReserva(reserva));
   }
 
@@ -44,7 +44,7 @@ public class ControleDeReservas {
   @ResponseBody
   public ResponseEntity<Reserva> atualizarReserva(@RequestHeader String chave, @RequestBody Reserva reserva){
 
-    controleDeAutenticacao.validarPrestador(chave);
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
     return Utils.generateResponse(servicoDeReserva.atualizarReserva(reserva));
   }
 
