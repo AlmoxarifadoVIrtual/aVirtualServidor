@@ -38,6 +38,9 @@ public class Produto {
   private double quantidade;
 
   @Column
+  private UnidadeDeMedidaEnum unidadeDeMedida;
+
+  @Column
   private double preco;
 
   @Column
@@ -118,6 +121,15 @@ public class Produto {
     this.observacao = observacao;
   }
 
+  public UnidadeDeMedidaEnum getUnidadeDeMedida() {
+    return unidadeDeMedida;
+  }
+
+  public void setUnidadeDeMedida(
+      UnidadeDeMedidaEnum unidadeDeMedida) {
+    this.unidadeDeMedida = unidadeDeMedida;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -127,31 +139,23 @@ public class Produto {
       return false;
     }
     Produto produto = (Produto) o;
-    return Objects.equals(getId(), produto.getId())
-        && Objects.equals(getNome(), produto.getNome())
-        && Objects.equals(getMarca(), produto.getMarca())
-        && Objects.equals(getReferencia(), produto.getReferencia())
-        && Objects.equals(getCor(), produto.getCor())
-        && Objects.equals(getDescricao(), produto.getDescricao());
+    return Double.compare(produto.getQuantidade(), getQuantidade()) == 0 &&
+        Double.compare(produto.getPreco(), getPreco()) == 0 &&
+        Objects.equals(getId(), produto.getId()) &&
+        Objects.equals(getNome(), produto.getNome()) &&
+        Objects.equals(getMarca(), produto.getMarca()) &&
+        Objects.equals(getReferencia(), produto.getReferencia()) &&
+        Objects.equals(getCor(), produto.getCor()) &&
+        Objects.equals(getDescricao(), produto.getDescricao()) &&
+        getUnidadeDeMedida() == produto.getUnidadeDeMedida() &&
+        Objects.equals(getObservacao(), produto.getObservacao());
   }
 
   @Override
   public int hashCode() {
 
-    return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao());
+    return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao(),
+        getQuantidade(), getUnidadeDeMedida(), getPreco(), getObservacao());
   }
 
-  @Override
-  public String toString() {
-    return "Produto{" +
-        "id=" + id +
-        ", nome='" + nome + '\'' +
-        ", marca='" + marca + '\'' +
-        ", referencia='" + referencia + '\'' +
-        ", cor='" + cor + '\'' +
-        ", descricao='" + descricao + '\'' +
-        ", quantidade=" + quantidade +
-        ", preco=" + preco +
-        '}';
-  }
 }
