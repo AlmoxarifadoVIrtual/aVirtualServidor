@@ -46,16 +46,17 @@ public class ControleDeProdutos {
   @PostMapping
   @ResponseBody
   public ResponseEntity<Produto> inserirProduto(@RequestBody Produto produto, @RequestHeader String chave) {
-
+    System.out.println(produto.toString());
     controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
     Produto produtoCadastrado = servicoDeProduto.encontrarProduto(produto.getId());
-
     if (produtoCadastrado == null) {
+
+      Produto novoProduto = servicoDeProduto.salvarProduto(produto);
       Operacao cadastro = new Operacao(TipoDeOperacao.CADASTRO, LocalDateTime.now().toString(),
-          Arrays.asList(produto), controleDeAutenticacao.getUsuarioId(chave));
+          Arrays.asList(novoProduto), controleDeAutenticacao.getUsuarioId(chave));
       servicoDeOperacao.save(cadastro);
 
-      return Utils.generateResponse(servicoDeProduto.salvarProduto(produto));
+      return Utils.generateResponse(novoProduto);
 
     } else if (produtoCadastrado.equals(produto)) {
       double armazenado = produtoCadastrado.getQuantidade();
@@ -113,6 +114,15 @@ public class ControleDeProdutos {
     if (produto == null) {
       throw new ProdutoInexistenteException();
     }
+  }
+
+  @PostMapping("/{id}")
+  @ResponseBody
+  public ResponseEntity<Produto> atualizarProduto(@RequestBody Produto produto, @RequestHeader String chave) {
+
+    controleDeAutenticacao.validarAlmoxarifeOuAdmin(chave);
+    Produto novoProduto = servicoDeProduto.salvarProduto(produto);
+    return Utils.generateResponse(novoProduto);
   }
 
   /**

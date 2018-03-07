@@ -59,16 +59,6 @@ public class ControleDeAutenticacao {
     }
   }
 
-  protected void validarPrestador(String chave) {
-
-    Token token = servicoToken.validarToken(chave);
-    if (token == null) {
-      throw new TokenException();
-    } else if (!servicoUsuario.validarPrestador(token.getUsuarioId())) {
-      throw new PermissaoException();
-    }
-  }
-
   protected void validarUsuarioOuAdmin(String chave, Long id) {
 
     Token token = servicoToken.validarToken(chave);

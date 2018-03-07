@@ -20,29 +20,35 @@ public class Produto {
   private Long id;
 
   @Column(nullable = false)
-  @NotEmpty(message = "O nome do produto não pode ser vazio.")
+  @NotEmpty(message = "O nome do produto não pode ser vazio!")
   private String nome;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A marca do produto não pode ser vazia.")
   private String marca;
 
-  @Column(nullable = false, unique = true)
-  @NotEmpty(message = "A referencia do produto não pode ser vazia.")
+  @Column(nullable = false)
+  @NotEmpty(message = "A referência do produto não pode ser vazia!")
   private String referencia;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A cor do produto não pode ser vazia.")
   private String cor;
 
   @Column(nullable = false)
-  @NotEmpty(message = "A descriçao do produto não pode ser vazio.")
   private String descricao;
 
   @Column(nullable = false)
-  @DecimalMin(value = "0.0", message = "Não existe quantidade de produtos negativo.")
+  @DecimalMin(value = "0.0", message = "A quantidade mínima deve ser maior que zero!")
   private double quantidade;
 
+  @Column(nullable = false)
+  private UnidadeDeMedidaEnum unidadeDeMedida;
+
+  @Column(nullable = false)
+  @DecimalMin(value = "0.0", message = "A quantidade mínima deve ser maior que zero!")
+  private double preco;
+
+  @Column(nullable = false)
+  private String observacao;
 
   public Produto() {
   }
@@ -103,6 +109,31 @@ public class Produto {
     this.quantidade = quantidade;
   }
 
+  public double getPreco() {
+    return preco;
+  }
+
+  public void setPreco(double preco) {
+    this.preco = preco;
+  }
+
+  public String getObservacao() {
+    return observacao;
+  }
+
+  public void setObservacao(String observacao) {
+    this.observacao = observacao;
+  }
+
+  public UnidadeDeMedidaEnum getUnidadeDeMedida() {
+    return unidadeDeMedida;
+  }
+
+  public void setUnidadeDeMedida(
+      UnidadeDeMedidaEnum unidadeDeMedida) {
+    this.unidadeDeMedida = unidadeDeMedida;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -112,17 +143,23 @@ public class Produto {
       return false;
     }
     Produto produto = (Produto) o;
-    return Objects.equals(getId(), produto.getId())
-        && Objects.equals(getNome(), produto.getNome())
-        && Objects.equals(getMarca(), produto.getMarca())
-        && Objects.equals(getReferencia(), produto.getReferencia())
-        && Objects.equals(getCor(), produto.getCor())
-        && Objects.equals(getDescricao(), produto.getDescricao());
+    return Double.compare(produto.getQuantidade(), getQuantidade()) == 0 &&
+        Double.compare(produto.getPreco(), getPreco()) == 0 &&
+        Objects.equals(getId(), produto.getId()) &&
+        Objects.equals(getNome(), produto.getNome()) &&
+        Objects.equals(getMarca(), produto.getMarca()) &&
+        Objects.equals(getReferencia(), produto.getReferencia()) &&
+        Objects.equals(getCor(), produto.getCor()) &&
+        Objects.equals(getDescricao(), produto.getDescricao()) &&
+        getUnidadeDeMedida() == produto.getUnidadeDeMedida() &&
+        Objects.equals(getObservacao(), produto.getObservacao());
   }
 
   @Override
   public int hashCode() {
 
-    return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao());
+    return Objects.hash(getId(), getNome(), getMarca(), getReferencia(), getCor(), getDescricao(),
+        getQuantidade(), getUnidadeDeMedida(), getPreco(), getObservacao());
   }
+
 }
