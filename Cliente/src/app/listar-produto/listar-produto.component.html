@@ -1,0 +1,73 @@
+<h1>Produtos em estoque </h1>
+
+
+<ul>
+  <li *ngFor="let produto of produtoL | async" >
+    Id: {{produto.id}}, Name: {{produto.nome}}
+  </li>
+</ul>
+
+<h3>Book Details after "subscribe" to Observable </h3>
+<ul>
+  <li *ngFor="let produto of produtoo" >
+    Id: {{produto.id}}, Name: {{produto.nome}}
+  </li>
+</ul>
+
+<div *ngIf="errorMessage"> {{errorMessage}} </div>
+
+<table class="table table-striped">
+  <tr>
+    <th>ID</th>
+    <th>Nome do produto</th>
+    <th>marca</th>
+    <th>Quantidade</th>
+    <th>Descrição</th>
+    <th>Cor</th>
+    <th>Referência</th>
+    <th> Ação </th>
+  </tr>
+<tbody>
+  <tr *ngFor="let produto of produtoL">
+    <td>{{produto.id}}</td>
+    <td>{{produto.nome}}</td>
+    <td>{{produto.marca}}</td>
+    <td>{{produto.quantidade}}</td>
+    <td>{{produto.descricao}}</td>
+    <td>{{produto.cor}}</td>
+    <td>{{produto.referencia}}</td>
+    <td>
+      <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-2">
+          <button type="button" class="btn btn-primary"  (click)="deletarItem(nome)">Remover</button>
+        </div>
+      </div>
+    </td>
+  </tr>
+</tbody>
+
+
+
+</table>
+<!--
+
+<mat-nav-list>
+  <mat-list-item *ngFor="let link of links">
+    <a matLine href="...">{{ link }}</a>
+    <button mat-icon-button (click)="showInfo(link)">
+      <mat-icon>info</mat-icon>
+    </button>
+  </mat-list-item>
+</mat-nav-list>
+
+
+<mat-list>
+  <mat-list-item *ngFor="let message of messages">
+    <h3 matLine> {{message.from}} </h3>
+    <p matLine> {{message.subject}} </p>
+    <p matLine class="demo-2"> {{message.content}} </p>
+  </mat-list-item>
+</mat-list>
+
+
+-->

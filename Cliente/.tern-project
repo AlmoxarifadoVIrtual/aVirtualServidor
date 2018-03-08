@@ -1,0 +1,15 @@
+{
+  "ecmaVersion": 6,
+  "plugins": {
+    "guess-types": {
+      
+    },
+    "eslint": {
+      "configFile": "E:\\STS\\WorkPlace\\Angular4Client\\tslint.json"
+    }
+  },
+  "libs": [
+    "ecma5",
+    "browser"
+  ]
+}

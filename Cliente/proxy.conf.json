@@ -1,0 +1,10 @@
+{
+  "/": {
+    "target": "https://a-virtual-servidor.herokuapp.com/",
+    "secure": false,
+    "pathRewrite": {
+      "^/": ""
+    },
+    "changeOrigin": true
+  }
+}
